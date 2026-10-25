@@ -51,6 +51,7 @@
     let diagnosticsTimer = null;
     let diagnosticsController = null;
     let diagnosticsSequence = 0;
+    let nativeRunEnabled = false;
     const workbenchToken = document.querySelector('meta[name="workbench-token"]')?.content || '';
 
     function apiFetch(url, options = {}) {
@@ -266,7 +267,7 @@
         }
 
         // Print command in terminal
-        appendTerminalOutput(`\n<span class="ansi-bold ansi-blue">c++ &gt; ${commandStr}</span>\n`);
+        appendTerminalOutput(`\n\x1b[1m\x1b[34mc++ > ${commandStr}\x1b[0m\n`);
 
         // Handle client-side 'clear' command
         if (commandStr === 'clear' || commandStr === 'cls') {
@@ -293,7 +294,7 @@
                 editor.value = data.updated_code;
                 updateLineNumbers();
                 updateCursorInfo();
-                appendTerminalOutput('<span class="ansi-green">⚡ [workbench] Code in editor updated automatically.</span>\n');
+                appendTerminalOutput('\x1b[32m⚡ [workbench] Code in editor updated automatically.\x1b[0m\n');
             }
 
             setTerminalInteractive(data.is_interactive, data.prompt);
@@ -302,7 +303,7 @@
             fetchDiagnostics();
 
         } catch (err) {
-            appendTerminalOutput(`\n<span class="ansi-red">Error executing command: ${err.message}</span>\n`);
+            appendTerminalOutput(`\n\x1b[31mError executing command: ${err.message}\x1b[0m\n`);
             setTerminalInteractive(false);
         } finally {
             if (isFixCommand) {
@@ -331,7 +332,7 @@
                 editor.value = data.updated_code;
                 updateLineNumbers();
                 updateCursorInfo();
-                appendTerminalOutput('<span class="ansi-green">⚡ [workbench] Code in editor updated automatically.</span>\n');
+                appendTerminalOutput('\x1b[32m⚡ [workbench] Code in editor updated automatically.\x1b[0m\n');
             }
 
             setTerminalInteractive(data.is_interactive, data.prompt);
@@ -343,7 +344,7 @@
             }
 
         } catch (err) {
-            appendTerminalOutput(`\n<span class="ansi-red">Error delivering keystroke: ${err.message}</span>\n`);
+            appendTerminalOutput(`\n\x1b[31mError delivering keystroke: ${err.message}\x1b[0m\n`);
             setTerminalInteractive(false);
         }
     }
@@ -588,7 +589,7 @@
 
     async function runFormat() {
         try {
-            appendTerminalOutput('\n<span class="ansi-bold ansi-blue">c++ &gt; fmt</span>\n');
+            appendTerminalOutput('\n\x1b[1m\x1b[34mc++ > fmt\x1b[0m\n');
             const res = await apiFetch('/api/format', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -599,12 +600,12 @@
                 editor.value = data.formatted_code;
                 updateLineNumbers();
                 updateCursorInfo();
-                appendTerminalOutput('<span class="ansi-green">Formatted and updated source in editor.</span>\n');
+                appendTerminalOutput('\x1b[32mFormatted and updated source in editor.\x1b[0m\n');
             } else if (data.error) {
-                appendTerminalOutput(`<span class="ansi-red">Format Error: ${data.error}</span>\n`);
+                appendTerminalOutput(`\x1b[31mFormat Error: ${data.error}\x1b[0m\n`);
             }
         } catch (err) {
-            appendTerminalOutput(`<span class="ansi-red">Format failed: ${err.message}</span>\n`);
+            appendTerminalOutput(`\x1b[31mFormat failed: ${err.message}\x1b[0m\n`);
         }
     }
 
@@ -680,7 +681,7 @@
             editor.value = presetsCache[key].code;
             updateLineNumbers();
             updateCursorInfo();
-            appendTerminalOutput(`\n<span class="ansi-cyan">[preset] Loaded: ${presetsCache[key].title}</span>\n`);
+            appendTerminalOutput(`\n\x1b[36m[preset] Loaded: ${presetsCache[key].title}\x1b[0m\n`);
             runTerminalCommand('check');
         }
     });
@@ -690,6 +691,18 @@
     // ==============================================================================
 
     async function init() {
+        try {
+            const capabilityRes = await apiFetch('/api/capabilities');
+            const capabilities = await capabilityRes.json();
+            nativeRunEnabled = capabilityRes.ok && capabilities.native_run === true;
+        } catch (err) {
+            nativeRunEnabled = false;
+        }
+        btnRun.disabled = !nativeRunEnabled;
+        btnRun.title = nativeRunEnabled
+            ? 'Compile & Run program natively (F5 or Ctrl+R)'
+            : 'Native execution is disabled because the workbench is running in safe mode';
+
         await loadPresets();
 
         // Print welcome banner in terminal
@@ -698,6 +711,7 @@
 \x1b[1m\x1b[96m  C++ Intelligent Error Correction & Recommendation Workbench (v1.0)\x1b[0m
 \x1b[1m\x1b[96m================================================================================\x1b[0m
 \x1b[90mPowered by Pure Python Standard Library (Zero External Dependencies)\x1b[0m
+Native compilation and execution: ${nativeRunEnabled ? '\x1b[32menabled' : '\x1b[33mdisabled (safe mode)'}\x1b[0m
 Type \x1b[1mcheck\x1b[0m, \x1b[1mfix\x1b[0m, \x1b[1mfix -i\x1b[0m, \x1b[1msuggest\x1b[0m, \x1b[1mexplain [code]\x1b[0m, \x1b[1mfmt\x1b[0m, \x1b[1mtokens\x1b[0m, or \x1b[1mhelp\x1b[0m.
 
 `;

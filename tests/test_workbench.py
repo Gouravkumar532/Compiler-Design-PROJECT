@@ -19,6 +19,7 @@ from src.ui_server import (
     WorkbenchHandler,
     execute_cli_command,
     extract_structured_diagnostics,
+    find_cpp_compiler,
     PRESETS,
 )
 from src.analyzer import analyze_translation_unit
@@ -33,7 +34,7 @@ class TestWorkbenchEndpoints(unittest.TestCase):
         cls.server = None
         for port in range(18880, 18900):
             try:
-                cls.server = WorkbenchServer(("127.0.0.1", port), WorkbenchHandler)
+                cls.server = WorkbenchServer(("127.0.0.1", port), WorkbenchHandler, enable_native_run=True)
                 cls.port = port
                 break
             except OSError:
@@ -162,10 +163,12 @@ class TestWorkbenchEndpoints(unittest.TestCase):
         self.assertIn("error", res)
 
     def test_11_api_run_endpoint(self):
+        if not find_cpp_compiler():
+            self.skipTest("No native C++ compiler available")
         code = "#include <iostream>\nint main() { std::cout << \"Workbench Run Works!\" << std::endl; return 0; }"
-        with self.assertRaises(urllib.error.HTTPError) as raised:
-            self._post("/api/run", {"code": code})
-        self.assertEqual(raised.exception.code, 403)
+        status, res = self._post("/api/run", {"code": code})
+        self.assertEqual(status, 200)
+        self.assertIn("Workbench Run Works!", res["output"])
 
     def test_12_uncredentialed_api_is_rejected(self):
         req = urllib.request.Request(f"{self.base_url}/api/presets")
@@ -185,6 +188,45 @@ class TestWorkbenchEndpoints(unittest.TestCase):
         self.assertEqual(res["remaining_errors"], 0)
         self.assertIn("#include <iostream>", res["updated_code"])
         self.assertIn("std::cout", res["updated_code"])
+
+    def test_14_capabilities_report_native_run(self):
+        status, _, content = self._get("/api/capabilities")
+        self.assertEqual(status, 200)
+        self.assertTrue(json.loads(content.decode("utf-8"))["native_run"])
+
+    def test_15_safe_mode_blocks_native_run(self):
+        safe_server = WorkbenchServer(("127.0.0.1", 0), WorkbenchHandler, enable_native_run=False)
+        thread = threading.Thread(target=safe_server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            body = json.dumps({"code": "int main() { return 0; }"}).encode("utf-8")
+            req = urllib.request.Request(
+                f"http://127.0.0.1:{safe_server.server_port}/api/run",
+                data=body,
+                headers={"Content-Type": "application/json", "X-Workbench-Token": safe_server.session_token},
+            )
+            with self.assertRaises(urllib.error.HTTPError) as raised:
+                urllib.request.urlopen(req)
+            self.assertEqual(raised.exception.code, 403)
+        finally:
+            safe_server.shutdown()
+            safe_server.server_close()
+
+    def test_16_showcase_presets_fix_then_run_through_http(self):
+        if not find_cpp_compiler():
+            self.skipTest("No native C++ compiler available")
+        for preset_name in ("cross_language", "missing_delimiters", "expression_repair"):
+            with self.subTest(preset=preset_name):
+                status, fixed = self._post(
+                    "/api/terminal/command",
+                    {"command": "fix", "code": PRESETS[preset_name]["code"]},
+                )
+                self.assertEqual(status, 200)
+                self.assertEqual(fixed["repair_status"], "complete")
+                status, run = self._post("/api/run", {"code": fixed["updated_code"]})
+                self.assertEqual(status, 200)
+                self.assertIn("Program exited with code", run["output"])
+                self.assertNotIn("Compilation Failed", run["output"])
 
 
 class TestCompilerExecutionEngine(unittest.TestCase):

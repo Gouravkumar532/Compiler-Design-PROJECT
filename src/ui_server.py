@@ -467,6 +467,8 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                 self._send_json(PRESETS)
             elif path == "/api/initial":
                 self._send_json({"code": _initial_file_content})
+            elif path == "/api/capabilities":
+                self._send_json({"native_run": bool(self.server.enable_native_run)})
             elif path == "/api/errors":
                 qs = urllib.parse.parse_qs(url.query)
                 code = qs.get("code", [""])[0].upper()
@@ -503,7 +505,7 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                     or (command_parts[0] == "c++" and len(command_parts) > 1 and command_parts[1] == "run")
                 )
                 if requests_native_run and not self.server.enable_native_run:
-                    self._send_json({"error": "Native execution is disabled. Start with --enable-native-run to opt in."}, status=403)
+                    self._send_json({"error": "Native execution is disabled because the workbench is running in safe mode."}, status=403)
                     return
                 result = execute_cli_command(cmd, code)
                 self._send_json(result, status=result.pop("status", 200))
@@ -559,7 +561,7 @@ class WorkbenchHandler(BaseHTTPRequestHandler):
                     self._send_json({"error": "code must be a string."}, status=400)
                     return
                 if not self.server.enable_native_run:
-                    self._send_json({"error": "Native execution is disabled. Start with --enable-native-run to opt in."}, status=403)
+                    self._send_json({"error": "Native execution is disabled because the workbench is running in safe mode."}, status=403)
                     return
                 result = execute_cli_command("run", code)
                 self._send_json(result)
@@ -638,7 +640,7 @@ def start_workbench(
     port: int = 8080,
     open_browser: bool = True,
     initial_file: Optional[str] = None,
-    enable_native_run: bool = False,
+    enable_native_run: bool = True,
 ):
     """Starts the C++ Compiler Workbench HTTP server and launches the user's browser."""
     global _initial_file_content
@@ -666,6 +668,9 @@ def start_workbench(
     url = f"http://127.0.0.1:{bind_port}"
     print(f"\n{Colors.BOLD}{Colors.CYAN}======================================================================{Colors.RESET}")
     print(f"{Colors.BOLD}{Colors.GREEN}[*] C++ Compiler Workbench running at: {Colors.CYAN}{url}{Colors.RESET}")
+    run_status = "enabled" if enable_native_run else "disabled (safe mode)"
+    run_color = Colors.GREEN if enable_native_run else Colors.YELLOW
+    print(f"{run_color}Native compilation and execution: {run_status}{Colors.RESET}")
     print(f"{Colors.DIM}Zero external dependencies | Pure Python 3.10+ standard library{Colors.RESET}")
     print(f"{Colors.DIM}Press Ctrl+C in this terminal to shut down the workbench.{Colors.RESET}")
     print(f"{Colors.BOLD}{Colors.CYAN}======================================================================{Colors.RESET}\n", flush=True)

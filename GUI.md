@@ -20,7 +20,14 @@ c++ workbench demo.cpp
 
 # Launch on custom port without automatically launching browser
 python main.py workbench demo.cpp --port 9000 --no-browser
+
+# Disable native compilation/execution when only analysis and repair are needed
+python main.py workbench demo.cpp --safe-mode
 ```
+
+Native compilation and execution are enabled for normal local workbench launches. In
+`--safe-mode`, the server reports that capability as unavailable and the browser disables
+the **Run** button; diagnostics, formatting, and repairs remain available.
 
 Once running, navigate to:
 ```text
@@ -124,6 +131,7 @@ All endpoints communicate using standard JSON payloads with CORS enabled:
 | `GET` | `/workbench.js` | Editor, ANSI renderer & API client | *(none)* | `application/javascript` |
 | `GET` | `/api/presets` | Showcase preset snippets | *(none)* | `{"preset_id": {"title", "description", "code"}}` |
 | `GET` | `/api/initial` | Initial source code passed via CLI | *(none)* | `{"code": string \| null}` |
+| `GET` | `/api/capabilities` | Reports whether native execution is available | *(none)* | `{"native_run": bool}` |
 | `GET` | `/api/errors?code=<code>` | Catalogue explanation entry | *(query param)* | `{"entry": {"title", "description", "causes", ...}}` |
 | `POST` | `/api/diagnostics` | In-memory AST & semantic diagnostics | `{"code": string}` | `{"errors": [...], "warnings": [...]}` |
 | `POST` | `/api/format` | AST pretty-printer | `{"code": string}` | `{"formatted_code": string}` |

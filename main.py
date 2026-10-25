@@ -79,7 +79,7 @@ def main():
     wb_parser = subparsers.add_parser("workbench", help="Launch interactive C++ Compiler Workbench in your web browser")
     wb_parser.add_argument("file", nargs="?", default=None, help="Optional .cpp source file to load into the workbench")
     wb_parser.add_argument("-p", "--port", type=int, default=8080, help="Port to listen on (default: 8080)")
-    wb_parser.add_argument("--enable-native-run", action="store_true", help="Explicitly allow local native C++ compilation and execution")
+    wb_parser.add_argument("--safe-mode", action="store_true", help="Disable native C++ compilation and execution")
     wb_parser.add_argument("--no-browser", action="store_true", help="Do not open the browser automatically")
 
     args = parser.parse_args()
@@ -91,7 +91,7 @@ def main():
             port=args.port,
             open_browser=not args.no_browser,
             initial_file=args.file,
-            enable_native_run=args.enable_native_run,
+            enable_native_run=not args.safe_mode,
         )
         sys.exit(0)
 
