@@ -1,118 +1,151 @@
 /* ==============================================================================
    C++ COMPILER WORKBENCH — CENTRAL COLOR PALETTE & THEME CONFIGURATION
    ==============================================================================
-   Option 3: Nordic Frost (Cool Arctic Teal & Matte Slate)
-     • Background:              #1E222A (Matte Polar Slate)
-     • Foreground / Text:       #ECEFF4 (Arctic Snow White)
-     • Primary Accent:          #88C0D0 (Frost Cyan / Aqua)
-     • Emphasis / Highlight:    #81A1C1 (Glacier Blue) & #A3BE8C (Sage Green)
-     • Secondary / Neutrals:    #4C566A (Muted Steel Slate) & #2E3440 (Deep North Panel)
+   High-Contrast Hybrid Studio Palette:
+     • Editor Canvas:           #FFFFFF (Pure Paper White)
+     • Editor Text & Syntax:    #0F172A (Deep Slate Ink) + Sky Blue (#0284C7) & Orange (#EA580C)
+     • Workbench Shell & Panes: #0E1015 (Deep Pitch Navy Black)
+     • Terminal Console:        #000000 (Pure Jet Black)
+     • Diagnostic Snippet Box:  #090B10 (Deep Obsidian with #F1F5F9 text)
+     • Run Button Hero CTA:     #38BDF8 (Vibrant Sky Blue / Cyan)
+     • Action Buttons:          #202531 (Matte Dark Slate with #323B4C border)
+     • Diagnostic Highlights:   Emerald (#10B981), Amber (#F59E0B), Crimson (#EF4444)
    ============================================================================== */
 
 :root {
-    /* --- Primary Palette Tokens (Option 3: Nordic Frost) --- */
-    --color-bg-base: #1E222A;              /* Background: Matte Polar Slate */
-    --color-fg-base: #ECEFF4;              /* Foreground / Text: Arctic Snow White */
-    --color-accent: #88C0D0;               /* Primary Accent: Frost Cyan / Aqua */
-    --color-glacier: #81A1C1;              /* Emphasis: Glacier Blue */
-    --color-sage: #A3BE8C;                 /* Emphasis: Sage Aurora Green */
-    --color-slate-muted: #4C566A;          /* Neutral Tone: Muted Steel Slate */
-    --color-panel-deep: #2E3440;           /* Neutral Tone: Deep North Panel */
+    /* --- Primary Palette Tokens --- */
+    --color-bg-base: #0E1015;              /* Shell Base: Deep Pitch Navy Black */
+    --color-fg-base: #FFFFFF;              /* Shell Foreground: Pure Crisp White */
+    --color-accent: #38BDF8;               /* Primary Accent: Vibrant Sky Blue / Cyan */
+    --color-glacier: #60A5FA;              /* Emphasis: Ice Blue */
+    --color-sage: #10B981;                 /* Emphasis: Emerald Green */
+    --color-slate-muted: #8B95A5;          /* Neutral Tone: Slate Muted */
+    --color-panel-deep: #151820;           /* Neutral Tone: Elevated Dark Panel */
 
     /* --- Surfaces & Backgrounds --- */
-    --bg-page: var(--color-bg-base);              /* Main page background: #1E222A */
-    --bg-header: #242832;                         /* Elevated top header bar */
+    --bg-page: var(--color-bg-base);              /* Main page background: #0E1015 */
+    --bg-header: #12141A;                         /* Elevated top header bar */
     --bg-pane: var(--color-bg-base);              /* Split pane container */
-    --bg-pane-header: #222630;                    /* Subtle contrasting pane header */
-    --bg-editor: #1B1E25;                         /* Immersive matte editor canvas */
-    --bg-editor-gutter: #16181E;                  /* Line numbers gutter */
-    --bg-terminal: #15171D;                       /* Deep Nordic terminal console */
-    --bg-terminal-input: #1D212A;                 /* Elevated terminal command input */
-    --bg-card: #252A34;                           /* Diagnostic cards */
-    --bg-card-hover: #2B313D;                     /* Diagnostic card hover */
-    --bg-badge: var(--color-panel-deep);          /* Badges & tags: #2E3440 */
-    --bg-modal: #232731;                          /* Modal dialog */
-    --bg-modal-overlay: rgba(15, 17, 23, 0.80);
+    --bg-pane-header: #151820;                    /* Contrasting dark pane header */
+    --bg-editor: #FFFFFF;                         /* High-contrast pure white editor canvas */
+    --bg-editor-gutter: #FFFFFF;                  /* Matching pure white line numbers gutter */
+    --bg-terminal: #000000;                       /* Pure pitch black terminal console */
+    --bg-terminal-input: #090A0E;                 /* Deep pitch black terminal input */
+    --bg-card: #151820;                           /* Diagnostic cards */
+    --bg-card-hover: #1C202B;                     /* Diagnostic card hover */
+    --bg-snippet: #090B10;                        /* Code snippet box inside dark cards */
+    --bg-badge: #1C202B;                          /* Badges & tags */
+    --bg-modal: #151820;                          /* Modal dialog */
+    --bg-modal-overlay: rgba(0, 0, 0, 0.85);      /* Dark backdrop */
 
     /* --- Borders & Dividers --- */
-    --border-main: var(--color-panel-deep);        /* Standard component dividers: #2E3440 */
-    --border-subtle: #272C37;                     /* Subtle separators */
-    --border-focus: var(--color-accent);          /* Focus indicator: #88C0D0 */
-    --border-card: #333946;                       /* Diagnostic card borders */
+    --border-main: #202530;                       /* Standard component dividers */
+    --border-subtle: #1C202B;                     /* Subtle separators */
+    --border-focus: var(--color-accent);          /* Focus indicator: #38BDF8 */
+    --border-card: #262C3A;                       /* Diagnostic card borders */
+    --border-editor-gutter: #E5E7EB;              /* Gutter divider in editor: light gray */
 
     /* --- Typography & Text --- */
-    --text-primary: var(--color-fg-base);         /* Arctic Snow White: #ECEFF4 */
-    --text-secondary: #D8DEE9;                    /* Polar Ice Gray: #D8DEE9 */
-    --text-muted: #7A879B;                        /* Subtle labels, metadata */
-    --text-gutter: var(--color-slate-muted);       /* Line numbers text: #4C566A */
-    --text-terminal: var(--color-fg-base);        /* Crisp snow text inside terminal */
-    --text-prompt: var(--color-accent);           /* Frost cyan terminal prompt: #88C0D0 */
+    --text-primary: #FFFFFF;                      /* Pure white text in dark chrome */
+    --text-secondary: #D1D5DB;                    /* Soft gray text */
+    --text-muted: #8B95A5;                        /* Subtle labels, metadata */
+    --text-gutter: #94A3B8;                       /* Line numbers text: Slate-400 */
+    --text-editor: #0F172A;                       /* Rich dark slate text inside white editor */
+    --text-terminal: #F1F5F9;                     /* Crisp white text inside black terminal */
+    --text-snippet: #F1F5F9;                      /* Crisp high-contrast text inside snippet box */
+    --text-prompt: #38BDF8;                       /* Sky blue terminal prompt: #38BDF8 */
+
+    /* --- Editor Syntax Highlighting Tokens --- */
+    --syntax-keyword: #0284C7;                    /* C++ keywords & types: Sky/Royal Blue */
+    --syntax-string: #EA580C;                     /* String literals & headers: Warm Orange */
+    --syntax-number: #16A34A;                     /* Numeric constants: Emerald Green */
+    --syntax-comment: #64748B;                    /* Comments: Muted Slate */
+    --syntax-std: #0284C7;                        /* std namespace & methods: Blue */
+    --syntax-op: #0F172A;                         /* Operators & punctuation: Dark slate */
 
     /* --- Primary Action Accent & Buttons --- */
-    --accent-primary: var(--color-accent);        /* Frost Cyan: #88C0D0 */
-    --accent-hover: #97CEE0;
-    --accent-active: #76B4C4;
-    --accent-subtle: rgba(136, 192, 208, 0.12);
-    --accent-border: rgba(136, 192, 208, 0.35);
+    --accent-primary: var(--color-accent);        /* Sky Blue: #38BDF8 */
+    --accent-hover: #0EA5E9;
+    --accent-active: #0284C7;
+    --accent-subtle: rgba(56, 189, 248, 0.15);
+    --accent-border: rgba(56, 189, 248, 0.40);
 
-    --btn-primary-bg: var(--color-accent);        /* Frost Cyan action button */
-    --btn-primary-text: #15181E;                  /* Ultra-high contrast dark slate text */
-    --btn-primary-hover: #97CEE0;
-    --btn-primary-active: #76B4C4;
+    /* --- Check Button (Matte Dark Slate with white text) --- */
+    --btn-primary-bg: #202531;
+    --btn-primary-text: #FFFFFF;
+    --btn-primary-hover: #2A3140;
+    --btn-primary-active: #1A1E28;
+    --btn-primary-border: #323B4C;
 
-    /* --- Run Button (Sage Green) --- */
-    --btn-run-bg: var(--color-sage);              /* Sage Aurora Green: #A3BE8C */
-    --btn-run-text: #15181E;                      /* Sharp dark slate text on light sage */
-    --btn-run-hover: #B2CCA0;
-    --btn-run-active: #93AE7E;
-    --btn-run-border: rgba(163, 190, 140, 0.45);
-    --btn-run-glow: rgba(163, 190, 140, 0.25);
+    /* --- Run Button (Vibrant Sky Blue Hero CTA) --- */
+    --btn-run-bg: #38BDF8;                        /* Sky Blue: #38BDF8 */
+    --btn-run-text: #0B0F19;                      /* High-contrast jet black label */
+    --btn-run-hover: #0EA5E9;
+    --btn-run-active: #0284C7;
+    --btn-run-border: #38BDF8;
+    --btn-run-glow: rgba(56, 189, 248, 0.35);
 
-    /* --- Diagnostic Status Colors (Nordic Aurora) --- */
-    --color-error: #BF616A;                       /* Aurora Red: #BF616A */
-    --color-error-bg: rgba(191, 97, 106, 0.14);
-    --color-error-border: rgba(191, 97, 106, 0.40);
+    /* --- Secondary Buttons --- */
+    --btn-secondary-bg: #202531;
+    --btn-secondary-border: #323B4C;
+    --btn-secondary-text: #FFFFFF;
+    --btn-secondary-hover: #2A3140;
 
-    --color-warning: #EBCB8B;                     /* Aurora Warm Amber / Gold: #EBCB8B */
-    --color-warning-bg: rgba(235, 203, 139, 0.14);
-    --color-warning-border: rgba(235, 203, 139, 0.40);
+    /* --- Diagnostic Status Colors --- */
+    --color-error: #EF4444;                       /* Crimson Red: #EF4444 */
+    --color-error-bg: rgba(239, 68, 68, 0.14);
+    --color-error-border: rgba(239, 68, 68, 0.40);
 
-    --color-success: var(--color-sage);           /* Aurora Sage Green: #A3BE8C */
-    --color-success-bg: rgba(163, 190, 140, 0.14);
-    --color-success-border: rgba(163, 190, 140, 0.40);
+    --color-warning: #F59E0B;                     /* Amber / Gold: #F59E0B */
+    --color-warning-bg: rgba(245, 158, 11, 0.14);
+    --color-warning-border: rgba(245, 158, 11, 0.40);
 
-    --color-info: var(--color-glacier);           /* Glacier Blue: #81A1C1 */
-    --color-info-bg: rgba(129, 161, 193, 0.14);
-    --color-info-border: rgba(129, 161, 193, 0.40);
+    --color-success: #10B981;                     /* Emerald Green: #10B981 */
+    --color-success-bg: rgba(16, 185, 129, 0.14);
+    --color-success-border: rgba(16, 185, 129, 0.40);
 
-    /* --- Terminal ANSI Color Palette (Calibrated for deep slate terminal) --- */
-    --ansi-black: #3B4252;
-    --ansi-red: #BF616A;
-    --ansi-green: #A3BE8C;
-    --ansi-yellow: #EBCB8B;
-    --ansi-blue: #81A1C1;
-    --ansi-magenta: #B48EAD;
-    --ansi-cyan: #88C0D0;
-    --ansi-white: #E5E9F0;
+    --color-info: #38BDF8;                        /* Sky Blue: #38BDF8 */
+    --color-info-bg: rgba(56, 189, 248, 0.14);
+    --color-info-border: rgba(56, 189, 248, 0.40);
 
-    --ansi-bright-black: var(--color-slate-muted);
-    --ansi-bright-red: #D08770;
-    --ansi-bright-green: #B5D49E;
-    --ansi-bright-yellow: #F0D399;
-    --ansi-bright-blue: #8FBCBB;
-    --ansi-bright-magenta: #C69EC0;
-    --ansi-bright-cyan: #9DD5E4;
-    --ansi-bright-white: #ECEFF4;
+    /* --- Terminal ANSI Color Palette --- */
+    --ansi-black: #1E232E;
+    --ansi-red: #EF4444;
+    --ansi-green: #22C55E;
+    --ansi-yellow: #F59E0B;
+    --ansi-blue: #38BDF8;
+    --ansi-magenta: #D946EF;
+    --ansi-cyan: #06B6D4;
+    --ansi-white: #F1F5F9;
+
+    --ansi-bright-black: #64748B;
+    --ansi-bright-red: #F87171;
+    --ansi-bright-green: #4ADE80;
+    --ansi-bright-yellow: #FBBF24;
+    --ansi-blue: #60A5FA;
+    --ansi-bright-magenta: #E879F9;
+    --ansi-bright-cyan: #22D3EE;
+    --ansi-bright-white: #FFFFFF;
 
     /* --- Unified Diff Styling --- */
-    --diff-add-text: #A3BE8C;
-    --diff-add-bg: rgba(163, 190, 140, 0.15);
-    --diff-remove-text: #BF616A;
-    --diff-remove-bg: rgba(191, 97, 106, 0.15);
-    --diff-context-text: #D8DEE9;
+    --diff-add-text: #22C55E;
+    --diff-add-bg: rgba(34, 197, 94, 0.15);
+    --diff-remove-text: #EF4444;
+    --diff-remove-bg: rgba(239, 68, 68, 0.15);
+    --diff-context-text: #D1D5DB;
 
     /* --- Scrollbars --- */
-    --scrollbar-thumb: #3B4252;
-    --scrollbar-thumb-hover: #4C566A;
-    --scrollbar-track: #181B21;
+    --scrollbar-thumb: #262C3A;
+    --scrollbar-thumb-hover: #374151;
+    --scrollbar-track: #0E1015;
+}
+
+/* --- Global Text Selection (Sky Blue Accent) --- */
+::selection {
+    background-color: rgba(56, 189, 248, 0.30);
+    color: #0F172A;
+}
+::-moz-selection {
+    background-color: rgba(56, 189, 248, 0.30);
+    color: #0F172A;
 }

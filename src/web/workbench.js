@@ -16,6 +16,8 @@
     const lineNumbers = document.getElementById('line-numbers');
     const cursorInfo = document.getElementById('editor-cursor');
     const lengthInfo = document.getElementById('editor-length');
+    const highlightEl = document.getElementById('editor-highlight');
+    const highlightCodeEl = document.getElementById('editor-highlight-code');
 
     const btnRun = document.getElementById('btn-run');
     const btnCheck = document.getElementById('btn-check');
@@ -51,7 +53,6 @@
     let diagnosticsTimer = null;
     let diagnosticsController = null;
     let diagnosticsSequence = 0;
-    let nativeRunEnabled = false;
     const workbenchToken = document.querySelector('meta[name="workbench-token"]')?.content || '';
 
     function apiFetch(url, options = {}) {
@@ -131,14 +132,82 @@
 
     function appendTerminalOutput(text, isCommand = false) {
         if (!text && !isCommand) return;
-        const html = ansiToHtml(text);
+        let html;
+        if (typeof text === 'string' && (text.includes('<span class=') || text.includes('&#9889;'))) {
+            html = text;
+        } else {
+            html = ansiToHtml(text);
+        }
         terminalOutput.innerHTML += html;
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
     }
 
     // ==============================================================================
-    // 2. CODE EDITOR HANDLING
+    // 2. CODE EDITOR HANDLING & SYNTAX HIGHLIGHTER
     // ==============================================================================
+
+    function highlightCpp(code) {
+        if (!code) return '';
+        let escaped = code
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        const tokens = [];
+        let pIdx = 0;
+        function saveToken(html) {
+            const ph = `__TOK_${pIdx++}__`;
+            tokens.push({ ph, html });
+            return ph;
+        }
+
+        // 1. Comments
+        escaped = escaped.replace(/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g, (match) => {
+            return saveToken(`<span class="syntax-comment">${match}</span>`);
+        });
+
+        // 2. Preprocessor include with header <...> or "..."
+        escaped = escaped.replace(/(#include)\s*(&lt;[^&gt;\n]+&gt;|"[^"\n]+")/g, (match, inc, hdr) => {
+            return saveToken(`<span class="syntax-keyword">${inc}</span> <span class="syntax-string">${hdr}</span>`);
+        });
+
+        // 3. Other preprocessor directives
+        escaped = escaped.replace(/(#(?:define|ifdef|ifndef|endif|pragma|if|elif|else)\b)/g, (match) => {
+            return saveToken(`<span class="syntax-keyword">${match}</span>`);
+        });
+
+        // 4. String literals
+        escaped = escaped.replace(/("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')/g, (match) => {
+            return saveToken(`<span class="syntax-string">${match}</span>`);
+        });
+
+        // 5. Standard library symbols: std::cout, std::endl, std::vector, etc.
+        escaped = escaped.replace(/\b(std::(?:cout|cin|cerr|endl|vector|string|map|set|pair|make_pair|unique_ptr|shared_ptr)|std)\b/g, (match) => {
+            return saveToken(`<span class="syntax-std">${match}</span>`);
+        });
+
+        // 6. Keywords & Types
+        escaped = escaped.replace(/\b(int|void|char|float|double|bool|long|short|unsigned|signed|auto|const|constexpr|static|class|struct|enum|union|public|private|protected|virtual|override|template|typename|return|if|else|while|for|do|switch|case|break|continue|default|new|delete|nullptr|true|false|this|sizeof|namespace|using|try|catch|throw)\b/g, (match) => {
+            return saveToken(`<span class="syntax-keyword">${match}</span>`);
+        });
+
+        // 7. Numbers
+        escaped = escaped.replace(/\b(\d+(?:\.\d+)?(?:[eE][+-]?\d+)?(?:[fFulL]*))\b/g, (match) => {
+            return saveToken(`<span class="syntax-number">${match}</span>`);
+        });
+
+        // Restore tokens
+        for (let i = tokens.length - 1; i >= 0; i--) {
+            escaped = escaped.replace(tokens[i].ph, tokens[i].html);
+        }
+
+        return escaped;
+    }
+
+    function updateHighlight() {
+        if (!highlightCodeEl) return;
+        highlightCodeEl.innerHTML = highlightCpp(editor.value);
+    }
 
     function updateLineNumbers() {
         const lines = editor.value.split('\n').length;
@@ -148,6 +217,7 @@
         }
         lineNumbers.textContent = numbers;
         lengthInfo.textContent = `${editor.value.length} chars`;
+        updateHighlight();
     }
 
     function updateCursorInfo() {
@@ -159,9 +229,13 @@
         cursorInfo.textContent = `Ln ${curLine}, Col ${curCol}`;
     }
 
-    // Synchronize scrolling between textarea and gutter
+    // Synchronize scrolling between textarea, highlight overlay and gutter
     editor.addEventListener('scroll', () => {
         lineNumbers.scrollTop = editor.scrollTop;
+        if (highlightEl) {
+            highlightEl.scrollTop = editor.scrollTop;
+            highlightEl.scrollLeft = editor.scrollLeft;
+        }
     });
 
     editor.addEventListener('input', () => {
@@ -267,7 +341,7 @@
         }
 
         // Print command in terminal
-        appendTerminalOutput(`\n\x1b[1m\x1b[34mc++ > ${commandStr}\x1b[0m\n`);
+        appendTerminalOutput(`\n<span class="ansi-bold ansi-blue">c++ &gt; ${commandStr}</span>\n`);
 
         // Handle client-side 'clear' command
         if (commandStr === 'clear' || commandStr === 'cls') {
@@ -294,7 +368,7 @@
                 editor.value = data.updated_code;
                 updateLineNumbers();
                 updateCursorInfo();
-                appendTerminalOutput('\x1b[32m⚡ [workbench] Code in editor updated automatically.\x1b[0m\n');
+                appendTerminalOutput('<span class="ansi-green">⚡ [workbench] Code in editor updated automatically.</span>\n');
             }
 
             setTerminalInteractive(data.is_interactive, data.prompt);
@@ -303,7 +377,7 @@
             fetchDiagnostics();
 
         } catch (err) {
-            appendTerminalOutput(`\n\x1b[31mError executing command: ${err.message}\x1b[0m\n`);
+            appendTerminalOutput(`\n<span class="ansi-red">Error executing command: ${err.message}</span>\n`);
             setTerminalInteractive(false);
         } finally {
             if (isFixCommand) {
@@ -332,7 +406,7 @@
                 editor.value = data.updated_code;
                 updateLineNumbers();
                 updateCursorInfo();
-                appendTerminalOutput('\x1b[32m⚡ [workbench] Code in editor updated automatically.\x1b[0m\n');
+                appendTerminalOutput('<span class="ansi-green">⚡ [workbench] Code in editor updated automatically.</span>\n');
             }
 
             setTerminalInteractive(data.is_interactive, data.prompt);
@@ -344,7 +418,7 @@
             }
 
         } catch (err) {
-            appendTerminalOutput(`\n\x1b[31mError delivering keystroke: ${err.message}\x1b[0m\n`);
+            appendTerminalOutput(`\n<span class="ansi-red">Error delivering keystroke: ${err.message}</span>\n`);
             setTerminalInteractive(false);
         }
     }
@@ -414,6 +488,16 @@
         }
     }
 
+        function formatDiagSnippet(snippet) {
+        if (!snippet) return '';
+        let escaped = escapeHtml(snippet);
+        // Highlight carets in bright red
+        escaped = escaped.replace(/(\^+)/g, '<span class="diag-caret">$1</span>');
+        // Mute line number columns like " 3 |" or "   |"
+        escaped = escaped.replace(/(^\s*\d*\s*\|)/gm, '<span class="diag-pipe">$1</span>');
+        return escaped;
+    }
+
     function renderDiagnostics(data) {
         const errors = data.errors || [];
         const warnings = data.warnings || [];
@@ -439,9 +523,9 @@
             badgeOk.textContent = 'Check Passed';
             diagnosticsBody.innerHTML = `
                 <div class="empty-state">
-                    <span class="empty-state-icon">✅</span>
-                    <p><strong>Clean Code! No Errors or Warnings.</strong></p>
-                    <p style="font-size: 11px;">Your C++ source code passed syntax and semantic checks with 0 diagnostics.</p>
+                    <span class="empty-state-icon">✔</span>
+                    <p style="color: #FFFFFF; font-size: 14px; font-weight: 700; margin: 4px 0;">Clean Code! No Errors or Warnings.</p>
+                    <p style="font-size: 12px; color: var(--text-muted);">Your C++ source code passed syntax and semantic checks with 0 diagnostics.</p>
                 </div>
             `;
             return;
@@ -466,7 +550,7 @@
                     </div>
                 </div>
                 <div class="diag-message">${escapeHtml(item.message)}</div>
-                ${item.snippet ? `<pre class="diag-snippet">${escapeHtml(item.snippet)}</pre>` : ''}
+                ${item.snippet ? `<pre class="diag-snippet">${formatDiagSnippet(item.snippet)}</pre>` : ''}
                 ${item.help ? `
                     <div class="diag-help">
                         <span class="diag-help-icon">💡</span>
@@ -589,7 +673,7 @@
 
     async function runFormat() {
         try {
-            appendTerminalOutput('\n\x1b[1m\x1b[34mc++ > fmt\x1b[0m\n');
+            appendTerminalOutput('\n<span class="ansi-bold ansi-blue">c++ &gt; fmt</span>\n');
             const res = await apiFetch('/api/format', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -600,12 +684,12 @@
                 editor.value = data.formatted_code;
                 updateLineNumbers();
                 updateCursorInfo();
-                appendTerminalOutput('\x1b[32mFormatted and updated source in editor.\x1b[0m\n');
+                appendTerminalOutput('<span class="ansi-green">Formatted and updated source in editor.</span>\n');
             } else if (data.error) {
-                appendTerminalOutput(`\x1b[31mFormat Error: ${data.error}\x1b[0m\n`);
+                appendTerminalOutput(`<span class="ansi-red">Format Error: ${data.error}</span>\n`);
             }
         } catch (err) {
-            appendTerminalOutput(`\x1b[31mFormat failed: ${err.message}\x1b[0m\n`);
+            appendTerminalOutput(`<span class="ansi-red">Format failed: ${err.message}</span>\n`);
         }
     }
 
@@ -681,7 +765,7 @@
             editor.value = presetsCache[key].code;
             updateLineNumbers();
             updateCursorInfo();
-            appendTerminalOutput(`\n\x1b[36m[preset] Loaded: ${presetsCache[key].title}\x1b[0m\n`);
+            appendTerminalOutput(`\n<span class="ansi-cyan">[preset] Loaded: ${presetsCache[key].title}</span>\n`);
             runTerminalCommand('check');
         }
     });
@@ -691,18 +775,6 @@
     // ==============================================================================
 
     async function init() {
-        try {
-            const capabilityRes = await apiFetch('/api/capabilities');
-            const capabilities = await capabilityRes.json();
-            nativeRunEnabled = capabilityRes.ok && capabilities.native_run === true;
-        } catch (err) {
-            nativeRunEnabled = false;
-        }
-        btnRun.disabled = !nativeRunEnabled;
-        btnRun.title = nativeRunEnabled
-            ? 'Compile & Run program natively (F5 or Ctrl+R)'
-            : 'Native execution is disabled because the workbench is running in safe mode';
-
         await loadPresets();
 
         // Print welcome banner in terminal
@@ -711,7 +783,6 @@
 \x1b[1m\x1b[96m  C++ Intelligent Error Correction & Recommendation Workbench (v1.0)\x1b[0m
 \x1b[1m\x1b[96m================================================================================\x1b[0m
 \x1b[90mPowered by Pure Python Standard Library (Zero External Dependencies)\x1b[0m
-Native compilation and execution: ${nativeRunEnabled ? '\x1b[32menabled' : '\x1b[33mdisabled (safe mode)'}\x1b[0m
 Type \x1b[1mcheck\x1b[0m, \x1b[1mfix\x1b[0m, \x1b[1mfix -i\x1b[0m, \x1b[1msuggest\x1b[0m, \x1b[1mexplain [code]\x1b[0m, \x1b[1mfmt\x1b[0m, \x1b[1mtokens\x1b[0m, or \x1b[1mhelp\x1b[0m.
 
 `;

@@ -20,7 +20,7 @@
             <div class="header-controls">
                 <!-- Preset Snippets Dropdown -->
                 <div class="preset-container">
-                    <label for="preset-select" class="control-label">Preset:</label>
+                    <label for="preset-select" class="control-label">PRESET:</label>
                     <select id="preset-select" class="select-input">
                         <option value="">-- Select a showcase preset --</option>
                         <option value="cross_language">1. Cross-Language Syntax (Python def, elif, print)</option>
@@ -45,7 +45,7 @@
                         <span>🔧</span> Fix All
                     </button>
                     <button id="btn-wizard" class="btn btn-wizard" title="Launch step-by-step Interactive Patch Reviewer in Terminal">
-                        <span>🛠️</span> Interactive Fix
+                        <span>⚡</span> Interactive Fix
                     </button>
                     <button id="btn-format" class="btn btn-secondary" title="Format code with standard styling (Ctrl+Alt+F)">
                         <span>📐</span> Format
@@ -76,7 +76,10 @@
                     </div>
                     <div class="editor-wrapper">
                         <div id="line-numbers" class="line-numbers">1</div>
-                        <textarea id="code-editor" class="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="// Write or paste C++ code here..."></textarea>
+                        <div class="editor-code-container">
+                            <pre id="editor-highlight" class="editor-highlight" aria-hidden="true"><code id="editor-highlight-code"></code></pre>
+                            <textarea id="code-editor" class="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="// Write or paste C++ code here..."></textarea>
+                        </div>
                     </div>
                 </section>
 
@@ -95,9 +98,9 @@
                     </div>
                     <div id="diagnostics-body" class="diagnostics-body">
                         <div class="empty-state">
-                            <span class="empty-state-icon">✨</span>
-                            <p><strong>No diagnostics yet.</strong></p>
-                            <p>Click <strong>Check</strong> or press <code>Ctrl+Enter</code> to analyze the code.</p>
+                            <span class="empty-state-icon">✔</span>
+                            <p style="color: #FFFFFF; font-size: 14px; font-weight: 700; margin: 4px 0;">Clean Code! No Errors or Warnings.</p>
+                            <p style="font-size: 12px; color: var(--text-muted);">Your C++ source code passed syntax and semantic checks with 0 diagnostics.</p>
                         </div>
                     </div>
                 </section>

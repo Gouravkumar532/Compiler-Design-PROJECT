@@ -20,14 +20,7 @@ c++ workbench demo.cpp
 
 # Launch on custom port without automatically launching browser
 python main.py workbench demo.cpp --port 9000 --no-browser
-
-# Disable native compilation/execution when only analysis and repair are needed
-python main.py workbench demo.cpp --safe-mode
 ```
-
-Native compilation and execution are enabled for normal local workbench launches. In
-`--safe-mode`, the server reports that capability as unavailable and the browser disables
-the **Run** button; diagnostics, formatting, and repairs remain available.
 
 Once running, navigate to:
 ```text
@@ -131,7 +124,6 @@ All endpoints communicate using standard JSON payloads with CORS enabled:
 | `GET` | `/workbench.js` | Editor, ANSI renderer & API client | *(none)* | `application/javascript` |
 | `GET` | `/api/presets` | Showcase preset snippets | *(none)* | `{"preset_id": {"title", "description", "code"}}` |
 | `GET` | `/api/initial` | Initial source code passed via CLI | *(none)* | `{"code": string \| null}` |
-| `GET` | `/api/capabilities` | Reports whether native execution is available | *(none)* | `{"native_run": bool}` |
 | `GET` | `/api/errors?code=<code>` | Catalogue explanation entry | *(query param)* | `{"entry": {"title", "description", "causes", ...}}` |
 | `POST` | `/api/diagnostics` | In-memory AST & semantic diagnostics | `{"code": string}` | `{"errors": [...], "warnings": [...]}` |
 | `POST` | `/api/format` | AST pretty-printer | `{"code": string}` | `{"formatted_code": string}` |
@@ -146,7 +138,7 @@ All endpoints communicate using standard JSON payloads with CORS enabled:
 The web assets are located in [`src/web/`](file:///c:/Users/Omkar%20Joshi/Desktop/COMPILER/Compiler-Design-PROJECT/src/web/):
 
 * [`index.html`](file:///c:/Users/Omkar%20Joshi/Desktop/COMPILER/Compiler-Design-PROJECT/src/web/index.html): Semantic layout containing header toolbar, preset picker, editor pane, diagnostics pane, terminal pane, and modal dialogue.
-* [`colors.css`](file:///c:/Users/Omkar%20Joshi/Desktop/COMPILER/Compiler-Design-PROJECT/src/web/colors.css): Centralized design tokens and dark-mode color scheme matching the terminal theme (`#1e1e2e`, `#a6e3a1`, `#f38ba8`, `#89b4fa`).
+* [`colors.css`](file:///c:/Users/Gourav/Desktop/Compiler-Design-PROJECT/src/web/colors.css): Centralized design tokens and professional monochrome studio color scheme (Obsidian `#0A0A0C`, pure stark white `#FFFFFF`, jet black `#000000`, and refined zinc accents).
 * [`workbench.css`](file:///c:/Users/Omkar%20Joshi/Desktop/COMPILER/Compiler-Design-PROJECT/src/web/workbench.css): Grid layout rules, flex containers, diagnostic card badges, buttons, scrollbars, and terminal font styling.
 * [`workbench.js`](file:///c:/Users/Omkar%20Joshi/Desktop/COMPILER/Compiler-Design-PROJECT/src/web/workbench.js): Client-side reactive logic, debounced diagnostics, ANSI-to-HTML parser, CLI command dispatcher, and interactive session keystroke listener.
 
