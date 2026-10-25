@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Compiler Web Playground | C++ to LLVM IR</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="brand">
+            <span class="logo">⚡</span>
+            <h1>C++ Compiler Playground</h1>
+            <span class="badge">v1.0.0 (LLVM IR)</span>
+        </div>
+        <div class="header-actions">
+            <div class="control-group">
+                <label for="example-select">Presets:</label>
+                <select id="example-select">
+                    <option value="hello">Hello World &amp; std::cout</option>
+                    <option value="fibonacci">Recursive Fibonacci</option>
+                    <option value="shapes">Polymorphism &amp; Virtual V-Table</option>
+                    <option value="templates">Templates &amp; Generics</option>
+                    <option value="optimization">Constant Folding &amp; Dead Code</option>
+                    <option value="exceptions">Exception Handling (try/catch)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="opt-select">Optimization:</label>
+                <select id="opt-select">
+                    <option value="0">-O0 (None)</option>
+                    <option value="1">-O1 (Constant Folding, DCE)</option>
+                    <option value="2" selected>-O2 (Loop Unroll, CSE, Inlining)</option>
+                </select>
+            </div>
+
+            <div class="control-group checkbox-group">
+                <input type="checkbox" id="debug-check" checked>
+                <label for="debug-check">Debug Info (-g)</label>
+            </div>
+
+            <button id="btn-format" class="btn secondary" title="Format code (Ctrl+Alt+F)">Format</button>
+            <button id="btn-compile" class="btn primary" title="Compile code (Ctrl+Enter)">
+                <span class="btn-icon">▶</span> Compile to IR
+            </button>
+        </div>
+    </header>
+
+    <main class="workbench">
+        <!-- Left: Code Editor -->
+        <section class="pane editor-pane">
+            <div class="pane-header">
+                <div class="pane-title">
+                    <span class="file-icon">📄</span>
+                    <span>main.cpp</span>
+                </div>
+                <div class="pane-status" id="editor-status">Ready</div>
+            </div>
+            <div class="editor-container">
+                <div class="line-numbers" id="line-numbers">1</div>
+                <textarea id="code-editor" spellcheck="false" autocomplete="off" placeholder="// Type your C++ code here..."></textarea>
+            </div>
+        </section>
+
+        <!-- Right: Compiler Pipeline & Outputs -->
+        <section class="pane output-pane">
+            <div class="pane-header">
+                <nav class="tabs" id="output-tabs">
+                    <button class="tab-btn active" data-tab="llvm-ir">LLVM IR <span class="badge-sm" id="ir-badge">0 lines</span></button>
+                    <button class="tab-btn" data-tab="ast">AST Tree</button>
+                    <button class="tab-btn" data-tab="tokens">Tokens</button>
+                    <button class="tab-btn" data-tab="stats">Pipeline Stats</button>
+                </nav>
+                <button id="btn-copy" class="btn icon-btn" title="Copy to clipboard">📋 Copy</button>
+            </div>
+
+            <div class="tab-content active" id="tab-llvm-ir">
+                <pre class="code-view" id="llvm-ir-view"><code>; LLVM IR Output will appear here...</code></pre>
+            </div>
+
+            <div class="tab-content" id="tab-ast">
+                <pre class="code-view" id="ast-view"><code>// Abstract Syntax Tree (AST) hierarchy...</code></pre>
+            </div>
+
+            <div class="tab-content" id="tab-tokens">
+                <div class="token-list" id="tokens-view">
+                    <!-- Token elements populated here -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-stats">
+                <div class="stats-card">
+                    <h3>Compiler Pipeline Timing &amp; Pass Metrics</h3>
+                    <div class="metrics-grid" id="metrics-grid">
+                        <div class="metric-box">
+                            <span class="metric-label">Total Time</span>
+                            <span class="metric-val" id="stat-total-time">0.00 ms</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Tokens Lexed</span>
+                            <span class="metric-val" id="stat-tokens-count">0</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">AST Declarations</span>
+                            <span class="metric-val" id="stat-ast-decls">0</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Constants Folded</span>
+                            <span class="metric-val" id="stat-folded">0</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Dead Statements Pruned</span>
+                            <span class="metric-val" id="stat-dce">0</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Generated IR Lines</span>
+                            <span class="metric-val" id="stat-ir-lines">0</span>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: #94a3b8;">Compilation Pipeline Phases:</h4>
+                    <ul class="pipeline-list" id="pipeline-list">
+                        <li><span class="phase-name">1. Preprocessor</span> <span class="phase-time">&lt; 0.1 ms</span></li>
+                        <li><span class="phase-name">2. Lexical Analysis</span> <span class="phase-time">&lt; 0.2 ms</span></li>
+                        <li><span class="phase-name">3. Recursive Descent Parsing</span> <span class="phase-time">&lt; 0.5 ms</span></li>
+                        <li><span class="phase-name">4. Type Checking &amp; Semantic Scope</span> <span class="phase-time">&lt; 0.4 ms</span></li>
+                        <li><span class="phase-name">5. AST Optimization Pass (-O2)</span> <span class="phase-time">&lt; 0.3 ms</span></li>
+                        <li><span class="phase-name">6. LLVM IR SSA Code Generation</span> <span class="phase-time">&lt; 0.5 ms</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div>C++ Compiler (Python &rarr; LLVM IR) | Targets LLVM 14-19 &amp; Clang</div>
+        <div class="shortcuts-hint">Hotkeys: <code>Ctrl+Enter</code> to compile | <code>Ctrl+Alt+F</code> to format | <code>Tab</code> inserts 4 spaces</div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

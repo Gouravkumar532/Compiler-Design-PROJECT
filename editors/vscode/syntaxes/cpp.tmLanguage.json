@@ -1,0 +1,127 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "C++",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#preprocessor" },
+    { "include": "#strings" },
+    { "include": "#characters" },
+    { "include": "#keywords" },
+    { "include": "#types" },
+    { "include": "#constants" },
+    { "include": "#operators" },
+    { "include": "#functions" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.cpp",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.cpp",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "preprocessor": {
+      "patterns": [
+        {
+          "name": "keyword.control.directive.cpp",
+          "match": "^\\s*#(include|define|undef|ifdef|ifndef|endif)\\b.*$"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.cpp",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.cpp",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "characters": {
+      "name": "string.quoted.single.cpp",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.cpp",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.cpp",
+          "match": "\\b(if|else|while|do|for|switch|case|default|break|continue|return)\\b"
+        },
+        {
+          "name": "keyword.other.cpp",
+          "match": "\\b(sizeof|struct|enum)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.cpp",
+          "match": "\\b(int|float|double|char|void)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.cpp",
+          "match": "\\b\\d+\\.\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.decimal.cpp",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arithmetic.cpp",
+          "match": "(\\+|\\-|\\*|/|%|\\+\\+|\\-\\-)"
+        },
+        {
+          "name": "keyword.operator.assignment.cpp",
+          "match": "(=|\\+=|\\-=|\\*=|/=|%=)"
+        },
+        {
+          "name": "keyword.operator.comparison.cpp",
+          "match": "(==|!=|<=|>=|<|>)"
+        },
+        {
+          "name": "keyword.operator.logical.cpp",
+          "match": "(&&|\\|\\||!)"
+        },
+        {
+          "name": "keyword.operator.pointer.cpp",
+          "match": "(&|\\*)"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(?=\\()",
+          "captures": {
+            "1": { "name": "entity.name.function.cpp" }
+          }
+        }
+      ]
+    }
+  },
+  "scopeName": "source.cpp"
+}

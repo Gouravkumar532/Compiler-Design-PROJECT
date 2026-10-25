@@ -1,0 +1,118 @@
+/* ==============================================================================
+   C++ COMPILER WORKBENCH — CENTRAL COLOR PALETTE & THEME CONFIGURATION
+   ==============================================================================
+   Option 3: Nordic Frost (Cool Arctic Teal & Matte Slate)
+     • Background:              #1E222A (Matte Polar Slate)
+     • Foreground / Text:       #ECEFF4 (Arctic Snow White)
+     • Primary Accent:          #88C0D0 (Frost Cyan / Aqua)
+     • Emphasis / Highlight:    #81A1C1 (Glacier Blue) & #A3BE8C (Sage Green)
+     • Secondary / Neutrals:    #4C566A (Muted Steel Slate) & #2E3440 (Deep North Panel)
+   ============================================================================== */
+
+:root {
+    /* --- Primary Palette Tokens (Option 3: Nordic Frost) --- */
+    --color-bg-base: #1E222A;              /* Background: Matte Polar Slate */
+    --color-fg-base: #ECEFF4;              /* Foreground / Text: Arctic Snow White */
+    --color-accent: #88C0D0;               /* Primary Accent: Frost Cyan / Aqua */
+    --color-glacier: #81A1C1;              /* Emphasis: Glacier Blue */
+    --color-sage: #A3BE8C;                 /* Emphasis: Sage Aurora Green */
+    --color-slate-muted: #4C566A;          /* Neutral Tone: Muted Steel Slate */
+    --color-panel-deep: #2E3440;           /* Neutral Tone: Deep North Panel */
+
+    /* --- Surfaces & Backgrounds --- */
+    --bg-page: var(--color-bg-base);              /* Main page background: #1E222A */
+    --bg-header: #242832;                         /* Elevated top header bar */
+    --bg-pane: var(--color-bg-base);              /* Split pane container */
+    --bg-pane-header: #222630;                    /* Subtle contrasting pane header */
+    --bg-editor: #1B1E25;                         /* Immersive matte editor canvas */
+    --bg-editor-gutter: #16181E;                  /* Line numbers gutter */
+    --bg-terminal: #15171D;                       /* Deep Nordic terminal console */
+    --bg-terminal-input: #1D212A;                 /* Elevated terminal command input */
+    --bg-card: #252A34;                           /* Diagnostic cards */
+    --bg-card-hover: #2B313D;                     /* Diagnostic card hover */
+    --bg-badge: var(--color-panel-deep);          /* Badges & tags: #2E3440 */
+    --bg-modal: #232731;                          /* Modal dialog */
+    --bg-modal-overlay: rgba(15, 17, 23, 0.80);
+
+    /* --- Borders & Dividers --- */
+    --border-main: var(--color-panel-deep);        /* Standard component dividers: #2E3440 */
+    --border-subtle: #272C37;                     /* Subtle separators */
+    --border-focus: var(--color-accent);          /* Focus indicator: #88C0D0 */
+    --border-card: #333946;                       /* Diagnostic card borders */
+
+    /* --- Typography & Text --- */
+    --text-primary: var(--color-fg-base);         /* Arctic Snow White: #ECEFF4 */
+    --text-secondary: #D8DEE9;                    /* Polar Ice Gray: #D8DEE9 */
+    --text-muted: #7A879B;                        /* Subtle labels, metadata */
+    --text-gutter: var(--color-slate-muted);       /* Line numbers text: #4C566A */
+    --text-terminal: var(--color-fg-base);        /* Crisp snow text inside terminal */
+    --text-prompt: var(--color-accent);           /* Frost cyan terminal prompt: #88C0D0 */
+
+    /* --- Primary Action Accent & Buttons --- */
+    --accent-primary: var(--color-accent);        /* Frost Cyan: #88C0D0 */
+    --accent-hover: #97CEE0;
+    --accent-active: #76B4C4;
+    --accent-subtle: rgba(136, 192, 208, 0.12);
+    --accent-border: rgba(136, 192, 208, 0.35);
+
+    --btn-primary-bg: var(--color-accent);        /* Frost Cyan action button */
+    --btn-primary-text: #15181E;                  /* Ultra-high contrast dark slate text */
+    --btn-primary-hover: #97CEE0;
+    --btn-primary-active: #76B4C4;
+
+    /* --- Run Button (Sage Green) --- */
+    --btn-run-bg: var(--color-sage);              /* Sage Aurora Green: #A3BE8C */
+    --btn-run-text: #15181E;                      /* Sharp dark slate text on light sage */
+    --btn-run-hover: #B2CCA0;
+    --btn-run-active: #93AE7E;
+    --btn-run-border: rgba(163, 190, 140, 0.45);
+    --btn-run-glow: rgba(163, 190, 140, 0.25);
+
+    /* --- Diagnostic Status Colors (Nordic Aurora) --- */
+    --color-error: #BF616A;                       /* Aurora Red: #BF616A */
+    --color-error-bg: rgba(191, 97, 106, 0.14);
+    --color-error-border: rgba(191, 97, 106, 0.40);
+
+    --color-warning: #EBCB8B;                     /* Aurora Warm Amber / Gold: #EBCB8B */
+    --color-warning-bg: rgba(235, 203, 139, 0.14);
+    --color-warning-border: rgba(235, 203, 139, 0.40);
+
+    --color-success: var(--color-sage);           /* Aurora Sage Green: #A3BE8C */
+    --color-success-bg: rgba(163, 190, 140, 0.14);
+    --color-success-border: rgba(163, 190, 140, 0.40);
+
+    --color-info: var(--color-glacier);           /* Glacier Blue: #81A1C1 */
+    --color-info-bg: rgba(129, 161, 193, 0.14);
+    --color-info-border: rgba(129, 161, 193, 0.40);
+
+    /* --- Terminal ANSI Color Palette (Calibrated for deep slate terminal) --- */
+    --ansi-black: #3B4252;
+    --ansi-red: #BF616A;
+    --ansi-green: #A3BE8C;
+    --ansi-yellow: #EBCB8B;
+    --ansi-blue: #81A1C1;
+    --ansi-magenta: #B48EAD;
+    --ansi-cyan: #88C0D0;
+    --ansi-white: #E5E9F0;
+
+    --ansi-bright-black: var(--color-slate-muted);
+    --ansi-bright-red: #D08770;
+    --ansi-bright-green: #B5D49E;
+    --ansi-bright-yellow: #F0D399;
+    --ansi-bright-blue: #8FBCBB;
+    --ansi-bright-magenta: #C69EC0;
+    --ansi-bright-cyan: #9DD5E4;
+    --ansi-bright-white: #ECEFF4;
+
+    /* --- Unified Diff Styling --- */
+    --diff-add-text: #A3BE8C;
+    --diff-add-bg: rgba(163, 190, 140, 0.15);
+    --diff-remove-text: #BF616A;
+    --diff-remove-bg: rgba(191, 97, 106, 0.15);
+    --diff-context-text: #D8DEE9;
+
+    /* --- Scrollbars --- */
+    --scrollbar-thumb: #3B4252;
+    --scrollbar-thumb-hover: #4C566A;
+    --scrollbar-track: #181B21;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "cpp-compiler-support",
+  "displayName": "C++ Language Support",
+  "description": "Syntax highlighting and language configuration for the C++ compiler.",
+  "version": "0.1.0",
+  "publisher": "cpp",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "cpp",
+        "aliases": ["C++", "cpp", "c++"],
+        "extensions": [".cpp", ".h"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cpp",
+        "scopeName": "source.cpp",
+        "path": "./syntaxes/cpp.tmLanguage.json"
+      }
+    ]
+  }
+}

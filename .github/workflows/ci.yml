@@ -1,0 +1,58 @@
+name: C++ Compiler CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }} (Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        python-version: [ "3.10", "3.11", "3.12" ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Verify CLI Help & Options
+        run: |
+          python main.py --help
+          python main.py check --help
+          python main.py fix --help
+          python main.py suggest --help
+          python main.py explain --help
+          python main.py fmt --help
+          python main.py tokens --help
+          python main.py ast --help
+          python main.py test --help
+          python main.py workbench --help
+
+      - name: Run Full Automated Test Suite
+        run: |
+          python main.py test -v
+
+      - name: Verify Compiler Subsystems & Explain Diagnostics
+        run: |
+          python main.py check test.cpp
+          python main.py fmt test.cpp
+          python main.py tokens test.cpp
+          python main.py ast test.cpp
+          python main.py explain P002
+          python main.py explain E016
+          python main.py explain W006
+
+      - name: Verify LSP Server Handshake
+        run: |
+          python -c "from src.lsp import LanguageServer; s = LanguageServer(); resp = s.handle_message({'jsonrpc': '2.0', 'id': 1, 'method': 'initialize', 'params': {}}); assert resp['result']['capabilities']['hoverProvider'] is True"

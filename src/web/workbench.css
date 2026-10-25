@@ -1,0 +1,682 @@
+@import url('colors.css');
+
+/* ==============================================================================
+   C++ COMPILER WORKBENCH — MAIN STYLESHEET
+   ============================================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+/* --- Scrollbar Customization --- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+/* ==============================================================================
+   APP CONTAINER LAYOUT
+   ============================================================================== */
+
+.workbench-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* --- App Header / Toolbar --- */
+.workbench-header {
+    height: 48px;
+    background-color: var(--bg-header);
+    border-bottom: 1px solid var(--border-main);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    font-size: 1.25rem;
+    color: var(--accent-primary);
+}
+
+.brand-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--text-primary);
+}
+
+.brand-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: var(--bg-badge);
+    color: var(--text-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.preset-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.control-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.select-input {
+    background-color: var(--bg-pane);
+    border: 1px solid var(--border-main);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.select-input:hover, .select-input:focus {
+    border-color: var(--border-focus);
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.btn-run {
+    background-color: var(--btn-run-bg);
+    color: var(--btn-run-text, #15181E);
+    border-color: var(--btn-run-border, rgba(163, 190, 140, 0.45));
+    box-shadow: 0 0 10px var(--btn-run-glow);
+}
+.btn-run:hover {
+    background-color: var(--btn-run-hover);
+    color: var(--btn-run-text, #15181E);
+}
+.btn-run:active {
+    background-color: var(--btn-run-active);
+}
+
+.btn-primary {
+    background-color: var(--btn-primary-bg, var(--accent-primary));
+    color: var(--btn-primary-text, #15181E);
+}
+.btn-primary:hover {
+    background-color: var(--btn-primary-hover, var(--accent-hover));
+    color: var(--btn-primary-text, #15181E);
+}
+.btn-primary:active {
+    background-color: var(--btn-primary-active, var(--accent-active));
+}
+
+.btn-secondary {
+    background-color: var(--bg-card);
+    border-color: var(--border-main);
+    color: var(--text-primary);
+}
+.btn-secondary:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--text-muted);
+}
+
+.btn-wizard {
+    background-color: var(--color-warning-bg);
+    border-color: var(--color-warning-border);
+    color: var(--color-warning);
+}
+.btn-wizard:hover {
+    background-color: rgba(245, 158, 11, 0.2);
+}
+
+.btn-sm {
+    padding: 3px 8px;
+    font-size: 11px;
+}
+
+.btn-icon-only {
+    padding: 6px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+}
+.btn-icon-only:hover {
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border-color: var(--border-main);
+}
+
+/* ==============================================================================
+   MAIN WORKSPACE SPLIT
+   ============================================================================== */
+
+.workbench-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* --- Top Half: Split into Editor & Diagnostics --- */
+.upper-workspace {
+    flex: 1;
+    display: flex;
+    min-height: 200px;
+    border-bottom: 1px solid var(--border-main);
+    overflow: hidden;
+}
+
+.pane {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-pane);
+    overflow: hidden;
+    min-width: 0;
+}
+
+.pane-editor {
+    flex: 1.1;
+    border-right: 1px solid var(--border-main);
+}
+
+.pane-diagnostics {
+    flex: 0.9;
+}
+
+/* --- Pane Headers --- */
+.pane-header {
+    height: 34px;
+    background-color: var(--bg-pane-header);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    flex-shrink: 0;
+}
+
+.pane-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.pane-title .icon {
+    font-size: 13px;
+}
+
+.pane-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.pill {
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.pill-error {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+    border: 1px solid var(--color-error-border);
+}
+
+.pill-warning {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+    border: 1px solid var(--color-warning-border);
+}
+
+.pill-ok {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+    border: 1px solid var(--color-success-border);
+}
+
+/* ==============================================================================
+   SECTION 1: CODE EDITOR PANE
+   ============================================================================== */
+
+.editor-wrapper {
+    flex: 1;
+    display: flex;
+    position: relative;
+    background-color: var(--bg-editor);
+    overflow: hidden;
+}
+
+.line-numbers {
+    width: 48px;
+    padding: 10px 8px 10px 0;
+    background-color: var(--bg-editor-gutter);
+    border-right: 1px solid var(--border-subtle);
+    color: var(--text-gutter);
+    font-family: "Fira Code", "Cascadia Code", Consolas, "Courier New", monospace;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: right;
+    user-select: none;
+    overflow: hidden;
+    white-space: pre;
+    flex-shrink: 0;
+}
+
+.code-editor {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    padding: 10px 12px;
+    background-color: transparent;
+    color: var(--text-primary);
+    font-family: "Fira Code", "Cascadia Code", Consolas, "Courier New", monospace;
+    font-size: 13px;
+    line-height: 20px;
+    border: none;
+    outline: none;
+    resize: none;
+    white-space: pre;
+    word-wrap: normal;
+    overflow: auto;
+    tab-size: 4;
+}
+
+/* ==============================================================================
+   SECTION 2: OUTPUT & ERROR DIAGNOSTICS PANE
+   ============================================================================== */
+
+.diagnostics-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-muted);
+    text-align: center;
+    gap: 8px;
+    padding: 30px;
+}
+
+.empty-state-icon {
+    font-size: 2.2rem;
+    opacity: 0.7;
+}
+
+.diag-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.diag-card:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-main);
+}
+
+.diag-card.error {
+    border-left: 4px solid var(--color-error);
+}
+
+.diag-card.warning {
+    border-left: 4px solid var(--color-warning);
+}
+
+.diag-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.diag-tag-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.diag-code {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.diag-card.error .diag-code {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+    border: 1px solid var(--color-error-border);
+}
+
+.diag-card.warning .diag-code {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+    border: 1px solid var(--color-warning-border);
+}
+
+.diag-location {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.diag-message {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.diag-snippet {
+    background-color: var(--bg-editor);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-family: "Fira Code", Consolas, monospace;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--text-secondary);
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.diag-help {
+    font-size: 12px;
+    color: var(--color-info);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.diag-help-icon {
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+.diag-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* ==============================================================================
+   SECTION 3: INTERACTIVE TERMINAL CONSOLE
+   ============================================================================== */
+
+.lower-workspace {
+    height: 38%;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-terminal);
+    border-top: 1px solid var(--border-main);
+    overflow: hidden;
+}
+
+.terminal-header {
+    height: 32px;
+    background-color: var(--bg-pane-header);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    flex-shrink: 0;
+}
+
+.terminal-status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-success);
+    margin-right: 6px;
+}
+
+.terminal-status-indicator.interactive {
+    background-color: var(--color-warning);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.terminal-output {
+    flex: 1;
+    padding: 10px 14px;
+    background-color: var(--bg-terminal);
+    color: var(--text-terminal);
+    font-family: "Fira Code", "Cascadia Code", Consolas, monospace;
+    font-size: 12.5px;
+    line-height: 19px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    user-select: text;
+}
+
+.terminal-input-bar {
+    height: 36px;
+    background-color: var(--bg-terminal-input);
+    border-top: 1px solid var(--border-main);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.terminal-prompt {
+    font-family: "Fira Code", Consolas, monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-prompt);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-terminal);
+    font-family: "Fira Code", Consolas, monospace;
+    font-size: 13px;
+    caret-color: var(--accent-primary);
+}
+
+.terminal-hints {
+    font-size: 11px;
+    color: var(--text-muted);
+    user-select: none;
+    white-space: nowrap;
+}
+
+/* --- ANSI Terminal Color Classes --- */
+.ansi-bold { font-weight: 700; }
+.ansi-dim { opacity: 0.65; }
+.ansi-red { color: var(--ansi-red); }
+.ansi-green { color: var(--ansi-green); }
+.ansi-yellow { color: var(--ansi-yellow); }
+.ansi-blue { color: var(--ansi-blue); }
+.ansi-magenta { color: var(--ansi-magenta); }
+.ansi-cyan { color: var(--ansi-cyan); }
+.ansi-white { color: var(--ansi-white); }
+
+.ansi-bright-red { color: var(--ansi-bright-red); font-weight: 600; }
+.ansi-bright-green { color: var(--ansi-bright-green); font-weight: 600; }
+.ansi-bright-yellow { color: var(--ansi-bright-yellow); font-weight: 600; }
+.ansi-bright-cyan { color: var(--ansi-bright-cyan); font-weight: 600; }
+
+/* ==============================================================================
+   PEDAGOGICAL MODAL DIALOG
+   ============================================================================== */
+
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-modal-overlay);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal-backdrop.active {
+    display: flex;
+}
+
+.modal-window {
+    width: 720px;
+    max-width: 90vw;
+    max-height: 85vh;
+    background-color: var(--bg-modal);
+    border: 1px solid var(--border-main);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.modal-header {
+    height: 44px;
+    background-color: var(--bg-pane-header);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+.modal-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.modal-code-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.code-box {
+    background-color: var(--bg-editor);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 12px;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.code-box-bad {
+    border-top: 3px solid var(--color-error);
+}
+
+.code-box-good {
+    border-top: 3px solid var(--color-success);
+}

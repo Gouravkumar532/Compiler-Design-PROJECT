@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Compiler Workbench | Error Correction &amp; Diagnostics Engine</title>
+    <link rel="stylesheet" href="colors.css">
+    <link rel="stylesheet" href="workbench.css">
+</head>
+<body>
+    <div class="workbench-app">
+        <!-- Main Application Header & Toolbar -->
+        <header class="workbench-header">
+            <div class="brand">
+                <span class="brand-icon">⚡</span>
+                <span class="brand-title">C++ Compiler Workbench</span>
+                <span class="brand-badge">Pure Python Stdlib</span>
+            </div>
+
+            <div class="header-controls">
+                <!-- Preset Snippets Dropdown -->
+                <div class="preset-container">
+                    <label for="preset-select" class="control-label">Preset:</label>
+                    <select id="preset-select" class="select-input">
+                        <option value="">-- Select a showcase preset --</option>
+                        <option value="cross_language">1. Cross-Language Syntax (Python def, elif, print)</option>
+                        <option value="missing_delimiters">2. Missing Semicolons &amp; Unbalanced Braces</option>
+                        <option value="expression_repair">3. Malformed Expressions (ab+ -> a+b)</option>
+                        <option value="auto_include">4. Missing Headers &amp; Namespaces (cout, vector)</option>
+                        <option value="operator_misuse">5. Operator Hazards (if x = 5, 2 ^ 8)</option>
+                        <option value="array_bounds">6. Static Array Bounds &amp; Off-by-One Loop</option>
+                        <option value="clean_hello">7. Clean C++ Hello World</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="btn-run" class="btn btn-run" title="Compile &amp; Run program natively (F5 or Ctrl+R)">
+                        <span>▶</span> Run
+                    </button>
+                    <button id="btn-check" class="btn btn-primary" title="Check for syntax and semantic errors (Ctrl+Enter)">
+                        <span>⚡</span> Check
+                    </button>
+                    <button id="btn-fix" class="btn btn-secondary" title="Batch auto-repair detected errors">
+                        <span>🔧</span> Fix All
+                    </button>
+                    <button id="btn-wizard" class="btn btn-wizard" title="Launch step-by-step Interactive Patch Reviewer in Terminal">
+                        <span>🛠️</span> Interactive Fix
+                    </button>
+                    <button id="btn-format" class="btn btn-secondary" title="Format code with standard styling (Ctrl+Alt+F)">
+                        <span>📐</span> Format
+                    </button>
+                    <button id="btn-clear" class="btn btn-icon-only" title="Clear editor content">
+                        <span>🗑️</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace Split: Editor & Diagnostics (Top) + Interactive Terminal (Bottom) -->
+        <main class="workbench-body">
+            <!-- Upper Workspace (Editor + Output/Diagnostics) -->
+            <div class="upper-workspace">
+                <!-- SECTION 1: Code Editor -->
+                <section class="pane pane-editor">
+                    <div class="pane-header">
+                        <div class="pane-title">
+                            <span class="icon">📄</span>
+                            <span>main.cpp</span>
+                        </div>
+                        <div class="pane-actions">
+                            <span id="editor-cursor">Ln 1, Col 1</span>
+                            <span>•</span>
+                            <span id="editor-length">0 chars</span>
+                        </div>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div id="line-numbers" class="line-numbers">1</div>
+                        <textarea id="code-editor" class="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="// Write or paste C++ code here..."></textarea>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: Output & Error Diagnostics -->
+                <section class="pane pane-diagnostics">
+                    <div class="pane-header">
+                        <div class="pane-title">
+                            <span class="icon">📋</span>
+                            <span>Output &amp; Diagnostics</span>
+                        </div>
+                        <div class="pane-actions">
+                            <span id="badge-errors" class="pill pill-error" style="display: none;">0 Errors</span>
+                            <span id="badge-warnings" class="pill pill-warning" style="display: none;">0 Warnings</span>
+                            <span id="badge-ok" class="pill pill-ok">Ready</span>
+                        </div>
+                    </div>
+                    <div id="diagnostics-body" class="diagnostics-body">
+                        <div class="empty-state">
+                            <span class="empty-state-icon">✨</span>
+                            <p><strong>No diagnostics yet.</strong></p>
+                            <p>Click <strong>Check</strong> or press <code>Ctrl+Enter</code> to analyze the code.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Lower Workspace (SECTION 3: Interactive Terminal Console) -->
+            <div class="lower-workspace">
+                <div class="terminal-header">
+                    <div class="pane-title">
+                        <span id="terminal-status-indicator" class="terminal-status-indicator"></span>
+                        <span>Interactive Terminal</span>
+                        <span id="terminal-status-text" style="font-size: 11px; color: var(--text-muted); font-weight: normal;">(Ready)</span>
+                    </div>
+                    <div class="pane-actions">
+                        <button id="btn-clear-terminal" class="btn btn-sm btn-secondary" title="Clear terminal output">Clear</button>
+                    </div>
+                </div>
+                <div id="terminal-output" class="terminal-output"></div>
+                <div class="terminal-input-bar">
+                    <span id="terminal-prompt" class="terminal-prompt">c++ &gt;</span>
+                    <input type="text" id="terminal-input" class="terminal-input" spellcheck="false" autocomplete="off" placeholder="Type a command (check, fix, fix -i, suggest, explain, fmt, tokens, help)...">
+                    <span class="terminal-hints">Enter to run • ↑↓ history</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Pedagogical Error Explanation Modal -->
+    <div id="modal-backdrop" class="modal-backdrop">
+        <div class="modal-window">
+            <div class="modal-header">
+                <span id="modal-title" class="modal-title">Error Explanation</span>
+                <button id="modal-close" class="btn btn-sm btn-icon-only">✕</button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Dynamically populated from ERROR_CATALOGUE -->
+            </div>
+        </div>
+    </div>
+
+    <script src="workbench.js"></script>
+</body>
+</html>
