@@ -8,7 +8,7 @@ The project uses Python's standard library and requires Python 3.10 or newer. No
 
 Clone or download the project, then run commands from its root directory:
 
-to view our main project view workbench with this command :
+to view our project and how it solves the problem access workbench with this command :
 ```bash
 python main.py workbench 
 ```
