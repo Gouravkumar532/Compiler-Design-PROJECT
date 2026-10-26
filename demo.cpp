@@ -1,13 +1,11 @@
-class Student {
-    int id;
-};
+#include<iostream>
 
 int calculate() {
-    int valid = 1;
+    int valid = 1
     if (valid) {
-        int a = 10;
+        a = 10;
         int b = 20;
-        return a + b;
+        cout<<a + b;
     }
     return 0;
 }

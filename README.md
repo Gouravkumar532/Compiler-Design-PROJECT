@@ -47,19 +47,19 @@ The analyzer implements a C++ subset for compiler-design learning; it is not a r
 
 ## Commands
 
-| Command | Purpose |
+| Command | What it does |
 | --- | --- |
-| `check <files...>` | Analyze source and report diagnostics |
-| `suggest <files...>` | Show proposed repairs without writing changes |
-| `fix <files...>` | Review or apply repairs (`--interactive`, `--write`, `--backup`) |
-| `fmt <files...>` | Format source (`--write` to update files) |
-| `tokens <files...>` | Display lexer output |
-| `ast <files...>` | Display the parsed syntax tree |
-| `explain [CODE]` | Explain one diagnostic code or list available codes |
-| `lsp` | Start the language server over standard input/output |
-| `workbench [file]` | Launch the browser-based workbench |
-| `bench-repair` | Run the repair benchmark suite |
-| `test` | Run the automated test suite |
+| `check <files...>` | Analyzes one or more C++ source files for syntax and semantic problems, then prints diagnostics. It does not change the files. Use `-v` to show analysis timings, `-Werror` to treat warnings as errors, or `--no-suggest` to turn off repair suggestions. |
+| `suggest <files...>` | Analyzes source files and displays proposed repairs as diff summaries alongside diagnostics. It never writes changes to disk. |
+| `fix <files...>` | Repairs supported errors. By default, prints the repaired source to the terminal; add `--write` to update the original file, or `--interactive` to review each proposed fix first. Add `--backup` with `--write` to save a `.bak` copy before changing a file. |
+| `fmt <files...>` | Formats source code and prints the result. Add `--write` to replace each input file with its formatted version. |
+| `tokens <files...>` | Runs the lexer and prints each source token with its type and position. Use this to inspect how the compiler reads the source text. |
+| `ast <files...>` | Parses source files and prints the Abstract Syntax Tree (AST), showing the program's structure. Diagnostics are printed if parsing or analysis finds problems. |
+| `explain [CODE]` | Explains a diagnostic code with a description and examples, such as `python main.py explain P003`. Without a code, lists all available diagnostic codes. |
+| `lsp` | Starts the Language Server Protocol (LSP) server on standard input and output so a compatible editor can request diagnostics and fixes. |
+| `workbench [file]` | Starts the browser-based editor and diagnostics workbench. Optionally opens a source file; `--port` changes the server port, `--no-browser` prevents opening a browser automatically, and `--safe-mode` disables native compile and run actions. |
+| `bench-repair` | Runs the curated repair benchmark and reports repair performance. Use `--category` to run one category, `--json` for machine-readable results, `--verbose` for case-by-case details, or `--export-report` to write the Markdown report. |
+| `test` | Runs the project's automated test suite. Add `-v` to show more detail for each test. |
 
 Examples:
 
@@ -70,6 +70,14 @@ python main.py workbench demo.cpp --safe-mode
 python main.py bench-repair --export-report
 python main.py test
 ```
+
+What each example does:
+
+- `python main.py explain P003` explains diagnostic code `P003`, which reports a missing semicolon.
+- `python main.py workbench demo.cpp --port 9000 --no-browser` opens `demo.cpp` in the workbench, serves it on port `9000`, and leaves browser launching to you.
+- `python main.py workbench demo.cpp --safe-mode` opens `demo.cpp` in the workbench with native C++ compile and run actions disabled.
+- `python main.py bench-repair --export-report` runs the repair benchmark and writes its results to `benchmarks/REPAIR_ACCURACY_REPORT.md`.
+- `python main.py test` runs the project's automated test suite and reports whether the tests pass.
 
 ## Project layout
 
@@ -86,10 +94,7 @@ implementations/        Feature design and implementation notes
 ## Documentation
 
 - [Workbench guide](GUI.md)
-- [VS Code extension guide](editors/vscode/README.md)
-- [Architecture notes](.ai/ARCHITECTURE.md)
 - [Repair benchmark report](benchmarks/REPAIR_ACCURACY_REPORT.md)
-- [Feature notes](implementations/README.md)
 
 ## Run the tests
 

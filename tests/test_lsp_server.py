@@ -8,54 +8,12 @@ import unittest
 
 
 class TestPhase9VSCodeLSP(unittest.TestCase):
-    """Smoke and packaging tests for Phase 9:
-    - VS Code extension manifest validation (package.json)
-    - Extension entry point existence
-    - End-to-end LSP stdio communication (initialize, didOpen diagnostics, shutdown, exit)
-    """
+    """Smoke tests for the Language Server Protocol (LSP) server."""
 
     @classmethod
     def setUpClass(cls):
         cls.project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-        cls.vscode_dir = os.path.join(cls.project_root, "editors", "vscode")
-        cls.package_json_path = os.path.join(cls.vscode_dir, "package.json")
         cls.main_py_path = os.path.join(cls.project_root, "main.py")
-
-    def test_package_json_manifest_and_configuration(self):
-        self.assertTrue(os.path.exists(self.package_json_path), "package.json must exist")
-        with open(self.package_json_path, "r", encoding="utf-8") as f:
-            pkg = json.load(f)
-
-        self.assertIn("main", pkg, "package.json must declare a 'main' entry point")
-        main_file = os.path.normpath(os.path.join(self.vscode_dir, pkg["main"]))
-        self.assertTrue(os.path.exists(main_file), f"Declared main file {main_file} must exist on disk")
-
-        # Activation events
-        self.assertIn("activationEvents", pkg)
-        self.assertIn("onLanguage:cpp", pkg["activationEvents"])
-
-        # Contributes configuration
-        contributes = pkg.get("contributes", {})
-        self.assertIn("configuration", contributes)
-        props = contributes["configuration"].get("properties", {})
-        self.assertIn("cpp.pythonPath", props)
-        self.assertIn("cpp.serverPath", props)
-
-        # Contributes commands
-        commands = [c.get("command") for c in contributes.get("commands", [])]
-        self.assertIn("cpp.startServer", commands)
-        self.assertIn("cpp.restartServer", commands)
-        self.assertIn("cpp.stopServer", commands)
-
-    def test_extension_entry_script_content(self):
-        ext_path = os.path.join(self.vscode_dir, "extension.js")
-        self.assertTrue(os.path.exists(ext_path))
-        with open(ext_path, "r", encoding="utf-8") as f:
-            content = f.read()
-        self.assertIn("function activate(", content)
-        self.assertIn("function deactivate(", content)
-        self.assertIn("textDocument/publishDiagnostics", content)
-        self.assertIn("cpp.startServer", content)
 
     def test_lsp_server_initialize_shutdown_exit_lifecycle(self):
         """Test full stdio JSON-RPC handshake against 'python main.py lsp'."""
