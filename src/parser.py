@@ -661,13 +661,15 @@ class Parser:
         self.consume(TokenType.LBRACE, "Expected '{' after struct name")
         members = []
         while not self.check(TokenType.RBRACE) and not self.is_at_end():
-            m_tok = self.consume_any([TokenType.INT, TokenType.FLOAT, TokenType.DOUBLE, TokenType.CHAR], "Expected member type")
-            m_type = m_tok.lexeme
-            while self.match(TokenType.STAR): m_type += "*"
+            m_type, m_const, m_ref = self.parse_type()
             m_name_tok = self.consume(TokenType.IDENTIFIER, "Expected member name")
             m_name = m_name_tok.lexeme
             self.consume(TokenType.SEMICOLON, "Expected ';' after member")
-            members.append(self.stamp_node(Parameter(m_type, m_name, m_name_tok.line, m_name_tok.col), m_name_tok))
+            members.append(self.stamp_node(
+                Parameter(m_type, m_name, m_name_tok.line, m_name_tok.col,
+                          is_const=m_const, is_reference=m_ref),
+                m_name_tok,
+            ))
         self.consume(TokenType.RBRACE, "Expected '}' after struct members")
         if not self.check(TokenType.SEMICOLON) and self.enable_repair and not self._in_repair:
             self.attempt_semicolon_repair("Expected ';' after struct definition", context="struct definition", in_class_or_struct=True)
