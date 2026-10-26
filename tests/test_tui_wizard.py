@@ -6,6 +6,7 @@ import unittest
 import tempfile
 import os
 import shutil
+from unittest.mock import patch
 
 from src.patch_model import (
     CodePatch,
@@ -180,6 +181,23 @@ class TestAtomicWriter(unittest.TestCase):
         self.assertTrue(restore_backup(self.file_path))
         with open(self.file_path, "r", encoding="utf-8") as f:
             self.assertEqual(f.read(), "int x = 1;\n")
+
+    def test_atomic_write_preserves_file_permissions(self):
+        recorded_modes = []
+        orig_chmod = os.chmod
+        def mock_chmod(path, mode):
+            recorded_modes.append(mode)
+            try:
+                orig_chmod(path, mode)
+            except OSError:
+                pass
+
+        fake_stat = os.stat_result((0o100644, 0, 0, 0, 0, 0, 10, 0, 0, 0))
+        with patch("os.stat", return_value=fake_stat):
+            with patch("os.chmod", side_effect=mock_chmod):
+                success = atomic_write(self.file_path, "int x = 500;\n")
+                self.assertTrue(success)
+                self.assertIn(fake_stat.st_mode, recorded_modes)
 
 
 class TestTUIWizardInteractive(unittest.TestCase):

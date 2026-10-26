@@ -82,6 +82,13 @@ def main():
     wb_parser.add_argument("--safe-mode", action="store_true", help="Disable native C++ compilation and execution")
     wb_parser.add_argument("--no-browser", action="store_true", help="Do not open the browser automatically")
 
+    # 11. Benchmark repair command (c++ bench-repair)
+    bench_parser = subparsers.add_parser("bench-repair", help="Run automated error repair benchmark suite across curated 120-bug corpus")
+    bench_parser.add_argument("--category", "-c", default=None, help="Filter benchmark cases by category name")
+    bench_parser.add_argument("--export-report", action="store_true", help="Export Markdown report to benchmarks/REPAIR_ACCURACY_REPORT.md")
+    bench_parser.add_argument("--json", action="store_true", help="Output raw benchmark results as JSON")
+    bench_parser.add_argument("-v", "--verbose", action="store_true", help="Print per-case detailed execution status")
+
     args = parser.parse_args()
 
     # Commands with no file arguments
@@ -97,6 +104,21 @@ def main():
 
     if args.command == "lsp":
         LanguageServer().run()
+        sys.exit(0)
+
+    if args.command == "bench-repair":
+        import json
+        import dataclasses
+        from src.benchmarks.benchmark_repair import BenchmarkRunner
+        runner = BenchmarkRunner()
+        summary = runner.run_suite(category_filter=args.category, verbose=getattr(args, "verbose", False))
+        if getattr(args, "json", False):
+            print(json.dumps(dataclasses.asdict(summary), indent=2))
+        else:
+            print(runner.format_terminal_report(summary))
+        if getattr(args, "export_report", False):
+            runner.export_markdown_report(summary, "benchmarks/REPAIR_ACCURACY_REPORT.md")
+            print(f"{Colors.GREEN}Exported report to benchmarks/REPAIR_ACCURACY_REPORT.md{Colors.RESET}")
         sys.exit(0)
 
     if args.command == "explain":

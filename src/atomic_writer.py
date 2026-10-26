@@ -54,6 +54,14 @@ def atomic_write(
     abs_path = os.path.abspath(file_path)
     dir_name = os.path.dirname(abs_path) or "."
 
+    # Preserve file permissions/mode if file exists
+    orig_mode = None
+    if os.path.isfile(abs_path):
+        try:
+            orig_mode = os.stat(abs_path).st_mode
+        except OSError:
+            pass
+
     # 1. Backup if requested
     if backup and os.path.isfile(abs_path):
         create_backup(abs_path, backup_ext)
@@ -70,6 +78,20 @@ def atomic_write(
             f.write(content)
             f.flush()
             os.fsync(f.fileno())
+
+        # Restore original permissions or apply umask-aware default before replacing
+        if orig_mode is not None:
+            try:
+                os.chmod(temp_path, orig_mode)
+            except OSError:
+                pass
+        else:
+            try:
+                umask = os.umask(0)
+                os.umask(umask)
+                os.chmod(temp_path, 0o666 & ~umask)
+            except (AttributeError, OSError):
+                pass
 
         # 3. Atomic replacement
         os.replace(temp_path, abs_path)
@@ -95,6 +117,7 @@ def atomic_write_many(
         return True
     staged: Dict[str, str] = {}
     originals: Dict[str, bytes] = {}
+    orig_modes: Dict[str, int] = {}
     replaced = []
     try:
         for file_path, content in updates.items():
@@ -102,6 +125,11 @@ def atomic_write_many(
             directory = os.path.dirname(target) or "."
             with open(target, "rb") as existing:
                 originals[target] = existing.read()
+            if os.path.isfile(target):
+                try:
+                    orig_modes[target] = os.stat(target).st_mode
+                except OSError:
+                    pass
             fd, temp_path = tempfile.mkstemp(
                 dir=directory, prefix=f".{os.path.basename(target)}.txn_", suffix=".tmp"
             )
@@ -109,6 +137,11 @@ def atomic_write_many(
                 staged_file.write(content)
                 staged_file.flush()
                 os.fsync(staged_file.fileno())
+            if target in orig_modes:
+                try:
+                    os.chmod(temp_path, orig_modes[target])
+                except OSError:
+                    pass
             staged[target] = temp_path
 
         if backup:
@@ -130,6 +163,11 @@ def atomic_write_many(
                 restore_file.write(originals[target])
                 restore_file.flush()
                 os.fsync(restore_file.fileno())
+            if target in orig_modes:
+                try:
+                    os.chmod(restore_path, orig_modes[target])
+                except OSError:
+                    pass
             os.replace(restore_path, target)
         raise
     finally:

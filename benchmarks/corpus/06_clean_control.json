@@ -1,0 +1,182 @@
+[
+  {
+    "id": "CLN_001",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Minimal clean main",
+    "buggy_code": "int main() {\n    return 0;\n}\n",
+    "expected_fix": "int main() {\n    return 0;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_002",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Basic arithmetic operations",
+    "buggy_code": "int main() {\n    int a = 10, b = 20;\n    int c = a + b * 2;\n    return c;\n}\n",
+    "expected_fix": "int main() {\n    int a = 10, b = 20;\n    int c = a + b * 2;\n    return c;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_003",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Standard while loop",
+    "buggy_code": "int main() {\n    int i = 0;\n    while (i < 10) {\n        i++;\n    }\n    return i;\n}\n",
+    "expected_fix": "int main() {\n    int i = 0;\n    while (i < 10) {\n        i++;\n    }\n    return i;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_004",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Standard for loop with array",
+    "buggy_code": "int main() {\n    int arr[5];\n    for (int i = 0; i < 5; i++) {\n        arr[i] = i * 2;\n    }\n    return arr[0];\n}\n",
+    "expected_fix": "int main() {\n    int arr[5];\n    for (int i = 0; i < 5; i++) {\n        arr[i] = i * 2;\n    }\n    return arr[0];\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_005",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Function declaration and call",
+    "buggy_code": "int add(int a, int b) {\n    return a + b;\n}\nint main() {\n    return add(3, 4);\n}\n",
+    "expected_fix": "int add(int a, int b) {\n    return a + b;\n}\nint main() {\n    return add(3, 4);\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_006",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Clean struct declaration and usage",
+    "buggy_code": "struct Point {\n    int x;\n    int y;\n};\nint main() {\n    Point p;\n    p.x = 1;\n    p.y = 2;\n    return p.x + p.y;\n}\n",
+    "expected_fix": "struct Point {\n    int x;\n    int y;\n};\nint main() {\n    Point p;\n    p.x = 1;\n    p.y = 2;\n    return p.x + p.y;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_007",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Clean class declaration",
+    "buggy_code": "class Counter {\npublic:\n    int val;\n    void inc() { val++; }\n};\nint main() {\n    Counter c;\n    c.val = 0;\n    c.inc();\n    return c.val;\n}\n",
+    "expected_fix": "class Counter {\npublic:\n    int val;\n    void inc() { val++; }\n};\nint main() {\n    Counter c;\n    c.val = 0;\n    c.inc();\n    return c.val;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_008",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Proper iostream include and output",
+    "buggy_code": "#include <iostream>\nint main() {\n    std::cout << \"Hello clean!\" << std::endl;\n    return 0;\n}\n",
+    "expected_fix": "#include <iostream>\nint main() {\n    std::cout << \"Hello clean!\" << std::endl;\n    return 0;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_009",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Valid equality comparison in if",
+    "buggy_code": "int main() {\n    int x = 5;\n    if (x == 5) {\n        return 1;\n    }\n    return 0;\n}\n",
+    "expected_fix": "int main() {\n    int x = 5;\n    if (x == 5) {\n        return 1;\n    }\n    return 0;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_010",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Valid logical AND in condition",
+    "buggy_code": "int main() {\n    int x = 5;\n    if (x > 0 && x < 10) {\n        return 1;\n    }\n    return 0;\n}\n",
+    "expected_fix": "int main() {\n    int x = 5;\n    if (x > 0 && x < 10) {\n        return 1;\n    }\n    return 0;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_011",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Genuine bitwise XOR between integers",
+    "buggy_code": "int main() {\n    int a = 10;\n    int b = 5;\n    int mask = a ^ b;\n    return mask;\n}\n",
+    "expected_fix": "int main() {\n    int a = 10;\n    int b = 5;\n    int mask = a ^ b;\n    return mask;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_012",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Genuine bitwise AND masking",
+    "buggy_code": "int main() {\n    int flags = 255;\n    int masked = flags & 15;\n    return masked;\n}\n",
+    "expected_fix": "int main() {\n    int flags = 255;\n    int masked = flags & 15;\n    return masked;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_013",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Array indexing with constant in bounds",
+    "buggy_code": "int main() {\n    int arr[10];\n    arr[0] = 1;\n    arr[9] = 2;\n    return arr[0] + arr[9];\n}\n",
+    "expected_fix": "int main() {\n    int arr[10];\n    arr[0] = 1;\n    arr[9] = 2;\n    return arr[0] + arr[9];\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_014",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Clean switch statement",
+    "buggy_code": "int main() {\n    int opt = 2;\n    switch (opt) {\n        case 1: return 10;\n        case 2: return 20;\n        default: return 0;\n    }\n}\n",
+    "expected_fix": "int main() {\n    int opt = 2;\n    switch (opt) {\n        case 1: return 10;\n        case 2: return 20;\n        default: return 0;\n    }\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_015",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Const variable usage",
+    "buggy_code": "int main() {\n    const int MAX = 100;\n    int x = MAX - 10;\n    return x;\n}\n",
+    "expected_fix": "int main() {\n    const int MAX = 100;\n    int x = MAX - 10;\n    return x;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_016",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Pointer referencing and dereferencing",
+    "buggy_code": "int main() {\n    int val = 42;\n    int* ptr = &val;\n    return *ptr;\n}\n",
+    "expected_fix": "int main() {\n    int val = 42;\n    int* ptr = &val;\n    return *ptr;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_017",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Nested loops with independent induction variables",
+    "buggy_code": "int main() {\n    int sum = 0;\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            sum += i + j;\n        }\n    }\n    return sum;\n}\n",
+    "expected_fix": "int main() {\n    int sum = 0;\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            sum += i + j;\n        }\n    }\n    return sum;\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_018",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Recursive factorial",
+    "buggy_code": "int fact(int n) {\n    if (n <= 1) return 1;\n    return n * fact(n - 1);\n}\nint main() {\n    return fact(5);\n}\n",
+    "expected_fix": "int fact(int n) {\n    if (n <= 1) return 1;\n    return n * fact(n - 1);\n}\nint main() {\n    return fact(5);\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_019",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Proper if-else if-else chain",
+    "buggy_code": "int main() {\n    int x = 5;\n    if (x > 10) {\n        return 1;\n    } else if (x > 0) {\n        return 2;\n    } else {\n        return 0;\n    }\n}\n",
+    "expected_fix": "int main() {\n    int x = 5;\n    if (x > 10) {\n        return 1;\n    } else if (x > 0) {\n        return 2;\n    } else {\n        return 0;\n    }\n}\n",
+    "expected_error_code": ""
+  },
+  {
+    "id": "CLN_020",
+    "category": "Clean_Control",
+    "difficulty": "Easy",
+    "description": "Valid do-while loop with semicolon",
+    "buggy_code": "int main() {\n    int i = 0;\n    do {\n        i++;\n    } while (i < 5);\n    return i;\n}\n",
+    "expected_fix": "int main() {\n    int i = 0;\n    do {\n        i++;\n    } while (i < 5);\n    return i;\n}\n",
+    "expected_error_code": ""
+  }
+]

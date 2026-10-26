@@ -1,0 +1,182 @@
+[
+  {
+    "id": "HDR_001",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::cout without iostream",
+    "buggy_code": "int main() {\n    std::cout << \"test\";\n    return 0;\n}",
+    "expected_fix": "#include <iostream>\nint main() {\n    std::cout << \"test\";\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_002",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::cin without iostream",
+    "buggy_code": "int main() {\n    int x;\n    std::cin >> x;\n    return 0;\n}",
+    "expected_fix": "#include <iostream>\nint main() {\n    int x;\n    std::cin >> x;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_003",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::vector without vector header",
+    "buggy_code": "int main() {\n    std::vector<int> v;\n    return 0;\n}",
+    "expected_fix": "#include <vector>\nint main() {\n    std::vector<int> v;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_004",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::string without string header",
+    "buggy_code": "int main() {\n    std::string s = \"hello\";\n    return 0;\n}",
+    "expected_fix": "#include <string>\nint main() {\n    std::string s = \"hello\";\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_005",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::map without map header",
+    "buggy_code": "int main() {\n    std::map<int, int> m;\n    return 0;\n}",
+    "expected_fix": "#include <map>\nint main() {\n    std::map<int, int> m;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_006",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::set without set header",
+    "buggy_code": "int main() {\n    std::set<int> st;\n    return 0;\n}",
+    "expected_fix": "#include <set>\nint main() {\n    std::set<int> st;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_007",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::sqrt without cmath header",
+    "buggy_code": "int main() {\n    double r = std::sqrt(16.0);\n    return 0;\n}",
+    "expected_fix": "#include <cmath>\nint main() {\n    double r = std::sqrt(16.0);\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_008",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::pow without cmath header",
+    "buggy_code": "int main() {\n    double p = std::pow(2.0, 8.0);\n    return 0;\n}",
+    "expected_fix": "#include <cmath>\nint main() {\n    double p = std::pow(2.0, 8.0);\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_009",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::sort without algorithm header",
+    "buggy_code": "int main() {\n    int arr[3] = {3, 1, 2};\n    std::sort(arr, arr + 3);\n    return 0;\n}",
+    "expected_fix": "#include <algorithm>\nint main() {\n    int arr[3] = {3, 1, 2};\n    std::sort(arr, arr + 3);\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_010",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::ifstream without fstream header",
+    "buggy_code": "int main() {\n    std::ifstream file(\"input.txt\");\n    return 0;\n}",
+    "expected_fix": "#include <fstream>\nint main() {\n    std::ifstream file(\"input.txt\");\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_011",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::ofstream without fstream header",
+    "buggy_code": "int main() {\n    std::ofstream file(\"output.txt\");\n    return 0;\n}",
+    "expected_fix": "#include <fstream>\nint main() {\n    std::ofstream file(\"output.txt\");\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_012",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::stringstream without sstream header",
+    "buggy_code": "int main() {\n    std::stringstream ss;\n    return 0;\n}",
+    "expected_fix": "#include <sstream>\nint main() {\n    std::stringstream ss;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_013",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::unique_ptr without memory header",
+    "buggy_code": "int main() {\n    std::unique_ptr<int> p;\n    return 0;\n}",
+    "expected_fix": "#include <memory>\nint main() {\n    std::unique_ptr<int> p;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_014",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::shared_ptr without memory header",
+    "buggy_code": "int main() {\n    std::shared_ptr<int> p;\n    return 0;\n}",
+    "expected_fix": "#include <memory>\nint main() {\n    std::shared_ptr<int> p;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_015",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::pair without utility header",
+    "buggy_code": "int main() {\n    std::pair<int, int> p = {1, 2};\n    return 0;\n}",
+    "expected_fix": "#include <utility>\nint main() {\n    std::pair<int, int> p = {1, 2};\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_016",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::tuple without tuple header",
+    "buggy_code": "int main() {\n    std::tuple<int, char> t;\n    return 0;\n}",
+    "expected_fix": "#include <tuple>\nint main() {\n    std::tuple<int, char> t;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_017",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::stack without stack header",
+    "buggy_code": "int main() {\n    std::stack<int> s;\n    return 0;\n}",
+    "expected_fix": "#include <stack>\nint main() {\n    std::stack<int> s;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_018",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "std::queue without queue header",
+    "buggy_code": "int main() {\n    std::queue<int> q;\n    return 0;\n}",
+    "expected_fix": "#include <queue>\nint main() {\n    std::queue<int> q;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_019",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "Unqualified cout without std namespace",
+    "buggy_code": "int main() {\n    cout << \"hello\";\n    return 0;\n}",
+    "expected_fix": "#include <iostream>\nint main() {\n    std::cout << \"hello\";\n    return 0;\n}",
+    "expected_error_code": "E015"
+  },
+  {
+    "id": "HDR_020",
+    "category": "Missing_Headers_NS",
+    "difficulty": "Easy",
+    "description": "Unqualified vector without std namespace",
+    "buggy_code": "int main() {\n    vector<int> v;\n    return 0;\n}",
+    "expected_fix": "#include <vector>\nint main() {\n    std::vector<int> v;\n    return 0;\n}",
+    "expected_error_code": "E015"
+  }
+]

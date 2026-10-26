@@ -1,0 +1,137 @@
+[
+  {
+    "id": "OPR_001",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Assignment in if condition",
+    "buggy_code": "int main() {\n    int x = 0;\n    if (x = 5) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int x = 0;\n    if (x == 5) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "W002"
+  },
+  {
+    "id": "OPR_002",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Assignment in while condition",
+    "buggy_code": "int main() {\n    int p = 1;\n    while (p = 0) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int p = 1;\n    while (p == 0) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "W002"
+  },
+  {
+    "id": "OPR_003",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Bitwise XOR instead of exponentiation literal",
+    "buggy_code": "int main() {\n    int x = 2 ^ 8;\n    return x;\n}",
+    "expected_fix": "int main() {\n    int x = (1 << 8);\n    return x;\n}",
+    "expected_error_code": "W003"
+  },
+  {
+    "id": "OPR_004",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Bitwise XOR power of 10",
+    "buggy_code": "int main() {\n    int k = 10 ^ 3;\n    return k;\n}",
+    "expected_fix": "#include <cmath>\nint main() {\n    int k = std::pow(10, 3);\n    return k;\n}",
+    "expected_error_code": "W003"
+  },
+  {
+    "id": "OPR_005",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Bitwise XOR square variable",
+    "buggy_code": "int main() {\n    int r = 5;\n    int sq = r ^ 2;\n    return sq;\n}",
+    "expected_fix": "int main() {\n    int r = 5;\n    int sq = r * r;\n    return sq;\n}",
+    "expected_error_code": "W003"
+  },
+  {
+    "id": "OPR_006",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Chained comparison three terms",
+    "buggy_code": "int main() {\n    int x = 5;\n    if (1 < x < 10) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int x = 5;\n    if (1 < x && x < 10) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "W004"
+  },
+  {
+    "id": "OPR_007",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Chained comparison score bounds",
+    "buggy_code": "int main() {\n    int score = 50;\n    if (10 <= score <= 100) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int score = 50;\n    if (10 <= score && score <= 100) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "W004"
+  },
+  {
+    "id": "OPR_008",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Chained comparison lower zero",
+    "buggy_code": "int main() {\n    int a = 2;\n    if (0 <= a < 5) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int a = 2;\n    if (0 <= a && a < 5) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "W004"
+  },
+  {
+    "id": "OPR_009",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Bitwise AND in boolean context",
+    "buggy_code": "int main() {\n    bool a = true, b = false;\n    if (a & b) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    bool a = true, b = false;\n    if (a && b) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "W005"
+  },
+  {
+    "id": "OPR_010",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Bitwise OR in boolean context",
+    "buggy_code": "int main() {\n    int x = 5, y = 20;\n    if ((x > 0) | (y < 10)) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int x = 5, y = 20;\n    if ((x > 0) || (y < 10)) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "W005"
+  },
+  {
+    "id": "OPR_011",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Constant array index out of bounds",
+    "buggy_code": "int main() {\n    int arr[5];\n    arr[5] = 10;\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int arr[5];\n    arr[4] = 10;\n    return 0;\n}",
+    "expected_error_code": "W006"
+  },
+  {
+    "id": "OPR_012",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Negative array indexing",
+    "buggy_code": "int main() {\n    int arr[5];\n    int last = arr[-1];\n    return last;\n}",
+    "expected_fix": "int main() {\n    int arr[5];\n    int last = arr[4];\n    return last;\n}",
+    "expected_error_code": "W006"
+  },
+  {
+    "id": "OPR_013",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Off-by-one loop condition <= size",
+    "buggy_code": "int main() {\n    int arr[5];\n    for (int i = 0; i <= 5; i++) {\n        arr[i] = i;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int arr[5];\n    for (int i = 0; i < 5; i++) {\n        arr[i] = i;\n    }\n    return 0;\n}",
+    "expected_error_code": "W007"
+  },
+  {
+    "id": "OPR_014",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "1-based indexing on 0-based array",
+    "buggy_code": "int main() {\n    int arr[5];\n    for (int i = 1; i <= 5; i++) {\n        arr[i] = i;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int arr[5];\n    for (int i = 0; i < 5; i++) {\n        arr[i] = i;\n    }\n    return 0;\n}",
+    "expected_error_code": "W007"
+  },
+  {
+    "id": "OPR_015",
+    "category": "Operator_Misuse",
+    "difficulty": "Medium",
+    "description": "Off-by-one while loop condition",
+    "buggy_code": "int main() {\n    int arr[5];\n    int i = 0;\n    while (i <= 5) {\n        arr[i] = 0;\n        i++;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int arr[5];\n    int i = 0;\n    while (i < 5) {\n        arr[i] = 0;\n        i++;\n    }\n    return 0;\n}",
+    "expected_error_code": "W007"
+  }
+]

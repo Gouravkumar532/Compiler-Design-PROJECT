@@ -1,0 +1,227 @@
+[
+  {
+    "id": "SYN_001",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after variable declaration",
+    "buggy_code": "int main() {\n    int a = 10\n    return a;\n}",
+    "expected_fix": "int main() {\n    int a = 10;\n    return a;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_002",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after return statement",
+    "buggy_code": "int main() {\n    int a = 10;\n    return a\n}",
+    "expected_fix": "int main() {\n    int a = 10;\n    return a;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_003",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after assignment",
+    "buggy_code": "int main() {\n    int x = 5;\n    x = 20\n    return x;\n}",
+    "expected_fix": "int main() {\n    int x = 5;\n    x = 20;\n    return x;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_004",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after struct declaration",
+    "buggy_code": "struct Point {\n    int x;\n    int y;\n}\nint main() { return 0; }",
+    "expected_fix": "struct Point {\n    int x;\n    int y;\n};\nint main() { return 0; }",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_005",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after class declaration",
+    "buggy_code": "class Box {\n    int width;\n}\nint main() { return 0; }",
+    "expected_fix": "class Box {\n    int width;\n};\nint main() { return 0; }",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_006",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after multiple variables",
+    "buggy_code": "int main() {\n    int a = 1, b = 2\n    return a + b;\n}",
+    "expected_fix": "int main() {\n    int a = 1, b = 2;\n    return a + b;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_007",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after function call",
+    "buggy_code": "void foo() {}\nint main() {\n    foo()\n    return 0;\n}",
+    "expected_fix": "void foo() {}\nint main() {\n    foo();\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_008",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon before closing brace",
+    "buggy_code": "int main() {\n    int res = 42\n}",
+    "expected_fix": "int main() {\n    int res = 42;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_009",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after float declaration",
+    "buggy_code": "int main() {\n    float pi = 3.14\n    return 0;\n}",
+    "expected_fix": "int main() {\n    float pi = 3.14;\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_010",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after char declaration",
+    "buggy_code": "int main() {\n    char c = 'a'\n    return 0;\n}",
+    "expected_fix": "int main() {\n    char c = 'a';\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_011",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after bool declaration",
+    "buggy_code": "int main() {\n    bool ok = true\n    return 0;\n}",
+    "expected_fix": "int main() {\n    bool ok = true;\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_012",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after break",
+    "buggy_code": "int main() {\n    while (1) {\n        break\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    while (1) {\n        break;\n    }\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_013",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after continue",
+    "buggy_code": "int main() {\n    for (int i = 0; i < 5; i++) {\n        continue\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    for (int i = 0; i < 5; i++) {\n        continue;\n    }\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_014",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after pointer declaration",
+    "buggy_code": "int main() {\n    int* p = nullptr\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int* p = nullptr;\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_015",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Easy",
+    "description": "Missing semicolon after array declaration",
+    "buggy_code": "int main() {\n    int arr[5] = {1, 2, 3, 4, 5}\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int arr[5] = {1, 2, 3, 4, 5};\n    return 0;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_016",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing closing parenthesis in if statement",
+    "buggy_code": "int main() {\n    int x = 5;\n    if (x > 0 {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int x = 5;\n    if (x > 0) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "P006"
+  },
+  {
+    "id": "SYN_017",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing closing parenthesis in while loop",
+    "buggy_code": "int main() {\n    int i = 0;\n    while (i < 5 {\n        i++;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int i = 0;\n    while (i < 5) {\n        i++;\n    }\n    return 0;\n}",
+    "expected_error_code": "P006"
+  },
+  {
+    "id": "SYN_018",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing closing parenthesis in for loop",
+    "buggy_code": "int main() {\n    for (int i = 0; i < 5; i++ {\n        int x = i;\n    }\n    return 0;\n}",
+    "expected_fix": "int main() {\n    for (int i = 0; i < 5; i++) {\n        int x = i;\n    }\n    return 0;\n}",
+    "expected_error_code": "P006"
+  },
+  {
+    "id": "SYN_019",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing closing bracket in array indexing",
+    "buggy_code": "int main() {\n    int arr[5];\n    int val = arr[2;\n    return val;\n}",
+    "expected_fix": "int main() {\n    int arr[5];\n    int val = arr[2];\n    return val;\n}",
+    "expected_error_code": "P004"
+  },
+  {
+    "id": "SYN_020",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing closing bracket in array declaration",
+    "buggy_code": "int main() {\n    int arr[5;\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int arr[5];\n    return 0;\n}",
+    "expected_error_code": "P004"
+  },
+  {
+    "id": "SYN_021",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing closing brace based on indentation",
+    "buggy_code": "int main() {\n    if (1) {\n        return 1;\n    return 0;\n}",
+    "expected_fix": "int main() {\n    if (1) {\n        return 1;\n    }\n    return 0;\n}",
+    "expected_error_code": "P004"
+  },
+  {
+    "id": "SYN_022",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Unclosed parenthesis in expression",
+    "buggy_code": "int main() {\n    int a = 1, b = 2;\n    int res = (a + b;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 1, b = 2;\n    int res = (a + b);\n    return res;\n}",
+    "expected_error_code": "P004"
+  },
+  {
+    "id": "SYN_023",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing semicolon after enum declaration",
+    "buggy_code": "enum Color { RED, GREEN, BLUE }\nint main() { return 0; }",
+    "expected_fix": "enum Color { RED, GREEN, BLUE };\nint main() { return 0; }",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_024",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing semicolon between consecutive statements",
+    "buggy_code": "int main() {\n    int x = 1\n    int y = 2;\n    return x + y;\n}",
+    "expected_fix": "int main() {\n    int x = 1;\n    int y = 2;\n    return x + y;\n}",
+    "expected_error_code": "P003"
+  },
+  {
+    "id": "SYN_025",
+    "category": "Syntax_Delimiters",
+    "difficulty": "Medium",
+    "description": "Missing semicolon in do-while",
+    "buggy_code": "int main() {\n    int i = 0;\n    do { i++; } while (i < 5)\n    return 0;\n}",
+    "expected_fix": "int main() {\n    int i = 0;\n    do { i++; } while (i < 5);\n    return 0;\n}",
+    "expected_error_code": "P003"
+  }
+]

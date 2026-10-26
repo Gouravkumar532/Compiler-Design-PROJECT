@@ -104,6 +104,8 @@ def analyze_translation_unit(
         original_sources = dict(preprocess_result.file_sources)
         display_names.update(preprocess_result.display_names)
         sink.display_names = display_names
+        for diag in preprocess_result.diagnostics:
+            sink.add(diag)
         preprocess_completed = True
         timings["Preprocess"] = (
             (time.perf_counter() - t0) * 1000.0,

@@ -40,35 +40,46 @@ class LanguageServer:
                 self._send_message(response)
 
     def _read_message(self) -> Optional[dict]:
-        """Reads a JSON-RPC message with Content-Length header from stdin."""
+        """Reads a JSON-RPC message with Content-Length header from stdin (binary UTF-8 safe)."""
         content_length = None
+        stdin_buf = getattr(sys.stdin, "buffer", sys.stdin)
         while True:
-            line = sys.stdin.readline()
-            if not line:
+            raw_line = stdin_buf.readline()
+            if not raw_line:
                 return None
-            line = line.strip()
+            line = raw_line.decode("latin-1", errors="replace").strip() if isinstance(raw_line, bytes) else raw_line.strip()
             if not line:
                 break
-            if line.startswith("Content-Length:"):
-                content_length = int(line.split(":")[1].strip())
+            if line.lower().startswith("content-length:"):
+                try:
+                    content_length = int(line.split(":", 1)[1].strip())
+                except ValueError:
+                    return None
 
         if content_length is None:
             return None
 
-        body = sys.stdin.read(content_length)
-        if not body:
+        body_data = stdin_buf.read(content_length)
+        if not body_data or len(body_data) < content_length:
             return None
         try:
+            body = body_data.decode("utf-8") if isinstance(body_data, bytes) else body_data
             return json.loads(body)
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, UnicodeDecodeError):
             return None
 
     def _send_message(self, msg: dict):
-        """Sends a JSON-RPC response or notification to stdout."""
+        """Sends a JSON-RPC response or notification to stdout (binary UTF-8 safe)."""
         body = json.dumps(msg, separators=(',', ':'))
-        header = f"Content-Length: {len(body.encode('utf-8'))}\r\n\r\n"
-        sys.stdout.write(header + body)
-        sys.stdout.flush()
+        body_bytes = body.encode("utf-8")
+        header = f"Content-Length: {len(body_bytes)}\r\n\r\n".encode("ascii")
+        stdout_buf = getattr(sys.stdout, "buffer", sys.stdout)
+        if hasattr(stdout_buf, "write"):
+            if isinstance(header, bytes) and not hasattr(stdout_buf, "buffer") and hasattr(stdout_buf, "encoding"):
+                stdout_buf.write(header.decode("ascii") + body)
+            else:
+                stdout_buf.write(header + body_bytes)
+            stdout_buf.flush()
 
     def handle_message(self, msg: dict) -> Optional[dict]:
         method = msg.get("method")

@@ -1,0 +1,227 @@
+[
+  {
+    "id": "EXP_001",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated identifiers with plus",
+    "buggy_code": "int main() {\n    int a = 1, b = 2;\n    int res = ab+;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 1, b = 2;\n    int res = a + b;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_002",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated identifiers with multiply",
+    "buggy_code": "int main() {\n    int c = 3, d = 4;\n    int res = cd*;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int c = 3, d = 4;\n    int res = c * d;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_003",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated identifiers with minus",
+    "buggy_code": "int main() {\n    int x = 5, y = 2;\n    int res = xy-;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int x = 5, y = 2;\n    int res = x - y;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_004",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated identifiers with divide",
+    "buggy_code": "int main() {\n    int j = 10, k = 2;\n    int res = jk/;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int j = 10, k = 2;\n    int res = j / k;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_005",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Parenthesized concatenated with plus",
+    "buggy_code": "int main() {\n    int a = 1, b = 2;\n    int res = (ab+);\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 1, b = 2;\n    int res = (a + b);\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_006",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated compound expression",
+    "buggy_code": "int main() {\n    int a = 1, b = 2, c = 3;\n    int res = (a+bc*);\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 1, b = 2, c = 3;\n    int res = (a + b * c);\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_007",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated in assignment",
+    "buggy_code": "int main() {\n    int a = 2, b = 3, res = 0;\n    res = ab+;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 2, b = 3, res = 0;\n    res = a + b;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_008",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated in multiplication assignment",
+    "buggy_code": "int main() {\n    int x = 4, y = 5, val = 0;\n    val = xy*;\n    return val;\n}",
+    "expected_fix": "int main() {\n    int x = 4, y = 5, val = 0;\n    val = x * y;\n    return val;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_009",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated named variables",
+    "buggy_code": "int main() {\n    int num1 = 10, num2 = 20;\n    int sum = num1num2+;\n    return sum;\n}",
+    "expected_fix": "int main() {\n    int num1 = 10, num2 = 20;\n    int sum = num1 + num2;\n    return sum;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_010",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Implicit multiplication before parenthesis",
+    "buggy_code": "int main() {\n    int a = 1, b = 2;\n    int res = 2(a + b);\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 1, b = 2;\n    int res = 2 * (a + b);\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_011",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Implicit multiplication on identifier x",
+    "buggy_code": "int main() {\n    int x = 5;\n    int res = 3x;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int x = 5;\n    int res = 3 * x;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_012",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Implicit multiplication on identifier y",
+    "buggy_code": "int main() {\n    int y = 7;\n    int res = 5y;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int y = 7;\n    int res = 5 * y;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_013",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Duplicate plus operators in binary expression",
+    "buggy_code": "int main() {\n    int a = 1, b = 2;\n    int res = a + + b;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 1, b = 2;\n    int res = a + b;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_014",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Duplicate minus operators in binary expression",
+    "buggy_code": "int main() {\n    int x = 5, y = 3;\n    int res = x - - y;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int x = 5, y = 3;\n    int res = x - y;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_015",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Adjacent plus and multiply operators",
+    "buggy_code": "int main() {\n    int a = 2, b = 3;\n    int res = a + * b;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 2, b = 3;\n    int res = a + b;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_016",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Adjacent minus and divide operators",
+    "buggy_code": "int main() {\n    int a = 2, b = 3;\n    int res = a - / b;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 2, b = 3;\n    int res = a - b;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_017",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Adjacent multiply and divide operators",
+    "buggy_code": "int main() {\n    int x = 6, y = 2;\n    int res = x * / y;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int x = 6, y = 2;\n    int res = x * y;\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_018",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Parenthesized groups implicit multiplication",
+    "buggy_code": "int main() {\n    int x = 1, y = 2, z = 3;\n    int res = (x + y)(z);\n    return res;\n}",
+    "expected_fix": "int main() {\n    int x = 1, y = 2, z = 3;\n    int res = (x + y) * (z);\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_019",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Single variable parentheses multiplication",
+    "buggy_code": "int main() {\n    int a = 4, b = 5;\n    int res = (a)(b);\n    return res;\n}",
+    "expected_fix": "int main() {\n    int a = 4, b = 5;\n    int res = (a) * (b);\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_020",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Constant and parenthesized multiplication",
+    "buggy_code": "int main() {\n    int k = 3;\n    int res = 10(k);\n    return res;\n}",
+    "expected_fix": "int main() {\n    int k = 3;\n    int res = 10 * (k);\n    return res;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_021",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated expression in return statement",
+    "buggy_code": "int main() {\n    int u = 3, v = 4;\n    return uv+;\n}",
+    "expected_fix": "int main() {\n    int u = 3, v = 4;\n    return u + v;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_022",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated multiplication in initialization",
+    "buggy_code": "int main() {\n    int p = 5, q = 6;\n    int total = pq*;\n    return total;\n}",
+    "expected_fix": "int main() {\n    int p = 5, q = 6;\n    int total = p * q;\n    return total;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_023",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated subtraction in argument",
+    "buggy_code": "int helper(int v) { return v; }\nint main() {\n    int m = 8, n = 3;\n    return helper(mn-);\n}",
+    "expected_fix": "int helper(int v) { return v; }\nint main() {\n    int m = 8, n = 3;\n    return helper(m - n);\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_024",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Compound expression in loop update",
+    "buggy_code": "int main() {\n    int r = 1, s = 2, t = 3;\n    r = st*;\n    return r;\n}",
+    "expected_fix": "int main() {\n    int r = 1, s = 2, t = 3;\n    r = s * t;\n    return r;\n}",
+    "expected_error_code": "P002"
+  },
+  {
+    "id": "EXP_025",
+    "category": "Expression_Repairs",
+    "difficulty": "Medium",
+    "description": "Concatenated division in variable initialization",
+    "buggy_code": "int main() {\n    int num = 20, den = 4;\n    int res = numden/;\n    return res;\n}",
+    "expected_fix": "int main() {\n    int num = 20, den = 4;\n    int res = num / den;\n    return res;\n}",
+    "expected_error_code": "P002"
+  }
+]

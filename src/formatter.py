@@ -37,15 +37,25 @@ class Formatter:
 
     def format_source(self, source: str, filename: str = "main.cpp") -> str:
         """Formats a full C++ source file, safely preserving preprocessor directives."""
+        import re
         from src.preprocessor import Preprocessor
         from src.lexer import Lexer
         from src.parser import Parser
         from src.diagnostics import DiagnosticSink
 
+        lines = source.splitlines()
+        has_conditionals = any(
+            re.match(r'^\s*#\s*(if|ifdef|ifndef|elif|else|endif)\b', line)
+            for line in lines
+        )
+
+        if has_conditionals:
+            return self._format_preserving_conditionals(source)
+
         directives = []
-        for line in source.splitlines():
+        for line in lines:
             s = line.strip()
-            if s.startswith("#include") or s.startswith("#define") or s.startswith("#pragma"):
+            if s.startswith("#"):
                 directives.append(s)
 
         silent_sink = DiagnosticSink(emit=False)
@@ -73,6 +83,94 @@ class Formatter:
         if directives:
             return "\n".join(directives) + "\n\n" + formatted_body.lstrip()
         return formatted_body
+
+    def _format_preserving_conditionals(self, source: str) -> str:
+        """Formats source while strictly preserving all conditional directives and branches."""
+        lines = source.splitlines()
+        out = []
+        indent_level = 0
+        in_block_comment = False
+
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                out.append("")
+                continue
+
+            # Handle block comments
+            if in_block_comment:
+                end = line.find("*/")
+                if end == -1:
+                    out.append(" " * (indent_level * self.indent_size) + stripped)
+                    continue
+                else:
+                    in_block_comment = False
+                    out.append(" " * (indent_level * self.indent_size) + stripped)
+                    continue
+
+            if stripped.startswith("/*") and not stripped.endswith("*/") and "*/" not in stripped:
+                in_block_comment = True
+                out.append(" " * (indent_level * self.indent_size) + stripped)
+                continue
+
+            # Preprocessor directives: preserve without stripping
+            if stripped.startswith("#"):
+                out.append(stripped)
+                continue
+
+            # Access specifiers: decrease indent by 1
+            if stripped in ("public:", "private:", "protected:"):
+                level = max(0, indent_level - 1)
+                out.append(" " * (level * self.indent_size) + stripped)
+                continue
+
+            # Count leading closing braces to unindent current line
+            leading_closes = 0
+            idx = 0
+            while idx < len(stripped) and stripped[idx] in ('}', ')'):
+                if stripped[idx] == '}':
+                    leading_closes += 1
+                idx += 1
+
+            curr_level = max(0, indent_level - leading_closes)
+            out.append(" " * (curr_level * self.indent_size) + stripped)
+
+            # Calculate indent change for next line
+            open_braces = 0
+            close_braces = 0
+            in_str = None
+            esc = False
+            i = 0
+            n = len(stripped)
+            while i < n:
+                c = stripped[i]
+                if in_str:
+                    if esc:
+                        esc = False
+                    elif c == "\\":
+                        esc = True
+                    elif c == in_str:
+                        in_str = None
+                else:
+                    if c in ('"', "'"):
+                        in_str = c
+                    elif c == '/' and i + 1 < n and stripped[i + 1] == '/':
+                        break
+                    elif c == '/' and i + 1 < n and stripped[i + 1] == '*':
+                        end_idx = stripped.find('*/', i + 2)
+                        if end_idx != -1:
+                            i = end_idx + 1
+                        else:
+                            break
+                    elif c == '{':
+                        open_braces += 1
+                    elif c == '}':
+                        close_braces += 1
+                i += 1
+
+            indent_level = max(0, indent_level + (open_braces - close_braces))
+
+        return "\n".join(out).rstrip() + "\n"
 
     def _indent(self) -> str:
         return " " * (self.indent_level * self.indent_size)
